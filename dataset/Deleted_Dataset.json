@@ -1,0 +1,19 @@
+{
+	"name": "Deleted_Dataset",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorage1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Binary",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"folderPath": "Output",
+				"container": "adfdemoc"
+			}
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

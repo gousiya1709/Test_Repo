@@ -1,0 +1,47 @@
+{
+	"name": "dataflow_TrsfrmActvy",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DatasetSrc",
+						"type": "DatasetReference"
+					},
+					"name": "EmpData"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DatasetSnk",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "DerivedColCntry"
+				},
+				{
+					"name": "ConditionalSplit1"
+				},
+				{
+					"name": "Union1"
+				},
+				{
+					"name": "Sort1"
+				},
+				{
+					"name": "SurrogateKey1"
+				},
+				{
+					"name": "Select1"
+				}
+			],
+			"script": "source(output(\n\t\t{Emp ID} as integer,\n\t\tName as string,\n\t\tCounty as string,\n\t\tGender as string,\n\t\t{Age in Company} as double,\n\t\tSalary as integer,\n\t\tDepartment as integer\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> EmpData\nEmpData derive(Country = upper(County),\n\t\tCountry_Newlist = iif(isNull(County),'Unknown',upper(County))) ~> DerivedColCntry\nDerivedColCntry split(equals(Department, 1),\n\tequals(Department, 2),\n\tequals(Department, 3),\n\tdisjoint: false) ~> ConditionalSplit1@(IT, HR, PAYROLL, UnknownDep)\nConditionalSplit1@IT, ConditionalSplit1@HR, ConditionalSplit1@PAYROLL, ConditionalSplit1@UnknownDep union(byName: true)~> Union1\nUnion1 sort(asc(Name, true)) ~> Sort1\nSort1 keyGenerate(output(ID as long),\n\tstartAt: 1L) ~> SurrogateKey1\nSurrogateKey1 select(mapColumn(\n\t\t{Emp ID},\n\t\tID,\n\t\t{Emp Name} = Name,\n\t\tCounty,\n\t\tGender,\n\t\t{Age in Company},\n\t\tSalary,\n\t\tDepartment,\n\t\tCountry,\n\t\tCountry_Newlist\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Select1\nSelect1 sink(input(\n\t\tColumn_1 as string,\n\t\tColumn_2 as string,\n\t\tColumn_3 as string,\n\t\tColumn_4 as string,\n\t\tColumn_5 as string,\n\t\tColumn_6 as string,\n\t\tColumn_7 as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:['Output_Trmsfr_Activity.csv'],\n\tpartitionBy('hash', 1),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> sink1"
+		}
+	}
+}

@@ -1,0 +1,23 @@
+{
+	"name": "pipeline_Execute",
+	"properties": {
+		"activities": [
+			{
+				"name": "Masterpipeline",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "pipeline_Delete",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			}
+		],
+		"annotations": [],
+		"lastPublishTime": "2020-11-11T18:32:46Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}
