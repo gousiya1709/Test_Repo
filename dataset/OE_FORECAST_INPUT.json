@@ -1,0 +1,22 @@
+{
+	"name": "OE_FORECAST_INPUT",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorage1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Excel",
+		"typeProperties": {
+			"sheetName": "CORE DATA",
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "TIRE_FORECAST_US_CAN_1020_w_HIST_updated_111720.xlsx",
+				"folderPath": "input",
+				"container": "adfdemoc"
+			},
+			"firstRowAsHeader": true
+		},
+		"schema": []
+	}
+}
