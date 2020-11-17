@@ -10,7 +10,10 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"fileName": "Department_data.csv",
+				"fileName": {
+					"value": "string(subMonths(utcnow(),1),'MMddyy')",
+					"type": "Expression"
+				},
 				"folderPath": "input",
 				"container": "adfdemoc"
 			},
