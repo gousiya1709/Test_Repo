@@ -10,10 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"fileName": {
-					"value": "string(subMonths(utcnow(),1),'MMddyy')",
-					"type": "Expression"
-				},
+				"fileName": "ABC.txt",
 				"folderPath": "input",
 				"container": "adfdemoc"
 			},
