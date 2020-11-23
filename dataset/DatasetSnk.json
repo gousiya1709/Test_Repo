@@ -10,7 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"fileName": "OE_OUTPUT_1.csv",
+				"fileName": "OE_OUTPUT_unpivot.csv",
 				"folderPath": "output",
 				"container": "adfdemoc"
 			},
