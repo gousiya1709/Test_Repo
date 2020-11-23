@@ -10,7 +10,6 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"fileName": "OE_OUTPUT_1.csv",
 				"folderPath": "output",
 				"container": "adfdemoc"
 			},

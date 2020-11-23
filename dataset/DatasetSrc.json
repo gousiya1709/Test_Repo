@@ -10,7 +10,6 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"fileName": "Employee_Data.csv",
 				"folderPath": "input",
 				"container": "adfdemoc"
 			},
@@ -19,36 +18,7 @@
 			"firstRowAsHeader": true,
 			"quoteChar": "\""
 		},
-		"schema": [
-			{
-				"name": "Emp ID",
-				"type": "String"
-			},
-			{
-				"name": "Name",
-				"type": "String"
-			},
-			{
-				"name": "County",
-				"type": "String"
-			},
-			{
-				"name": "Gender",
-				"type": "String"
-			},
-			{
-				"name": "Age in Company",
-				"type": "String"
-			},
-			{
-				"name": "Salary",
-				"type": "String"
-			},
-			{
-				"name": "Department",
-				"type": "String"
-			}
-		]
+		"schema": []
 	},
 	"type": "Microsoft.DataFactory/factories/datasets"
 }
