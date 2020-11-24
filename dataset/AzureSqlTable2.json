@@ -9,18 +9,17 @@
 		"type": "AzureSqlTable",
 		"schema": [
 			{
-				"name": "dep",
-				"type": "int",
-				"precision": 10
+				"name": "OriginalSpeedRating",
+				"type": "varchar"
 			},
 			{
-				"name": "depname",
+				"name": "NewSpeedRating",
 				"type": "varchar"
 			}
 		],
 		"typeProperties": {
 			"schema": "dbo",
-			"table": "Dep"
+			"table": "OE_Forecast_SpeedRatng"
 		}
 	}
 }
