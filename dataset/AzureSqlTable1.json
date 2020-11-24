@@ -32,7 +32,7 @@
 		],
 		"typeProperties": {
 			"schema": "dbo",
-			"table": "Persons"
+			"table": "Lookup_OE_Forecast"
 		}
 	}
 }
