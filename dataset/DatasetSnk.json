@@ -10,6 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
+				"fileName": "TIRE_FORECAST_US_CAN_1020_w_HIST_updated_111720.xlsx.csv",
 				"folderPath": "output",
 				"container": "adfdemoc"
 			},
@@ -56,7 +57,7 @@
 				"type": "String"
 			},
 			{
-				"name": "Regional Segment Concat or DRI SEGMENT",
+				"name": "Regional Segment  Concat or DRI SEGMENT",
 				"type": "String"
 			},
 			{
@@ -208,7 +209,7 @@
 				"type": "String"
 			},
 			{
-				"name": "AS / SUM / WIN / LRR APPLIES TO OEM MARKETING",
+				"name": "AS / SUM / WIN / LRR  APPLIES TO OEM MARKETING",
 				"type": "String"
 			},
 			{
@@ -220,7 +221,7 @@
 				"type": "String"
 			},
 			{
-				"name": "RUN_FLAT DETAIL (INTERNAL TO TIRE)",
+				"name": "RUN_FLAT DETAIL  (INTERNAL TO TIRE)",
 				"type": "String"
 			},
 			{
@@ -232,7 +233,231 @@
 				"type": "String"
 			},
 			{
-				"name": "SPARE DETAIL (EXTERNAL TO TIRE)",
+				"name": "SPARE DETAIL  (EXTERNAL TO TIRE)",
+				"type": "String"
+			},
+			{
+				"name": "1998_VVOL",
+				"type": "String"
+			},
+			{
+				"name": "1999_VVOL",
+				"type": "String"
+			},
+			{
+				"name": "2000_VVOL",
+				"type": "String"
+			},
+			{
+				"name": "2001_VVOL",
+				"type": "String"
+			},
+			{
+				"name": "2002_VVOL",
+				"type": "String"
+			},
+			{
+				"name": "2003_VVOL",
+				"type": "String"
+			},
+			{
+				"name": "2004_VVOL",
+				"type": "String"
+			},
+			{
+				"name": "2005_VVOL",
+				"type": "String"
+			},
+			{
+				"name": "2006_VVOL",
+				"type": "String"
+			},
+			{
+				"name": "2007_VVOL",
+				"type": "String"
+			},
+			{
+				"name": "2008_VVOL",
+				"type": "String"
+			},
+			{
+				"name": "2009_VVOL",
+				"type": "String"
+			},
+			{
+				"name": "2010_VVOL",
+				"type": "String"
+			},
+			{
+				"name": "2011_VVOL",
+				"type": "String"
+			},
+			{
+				"name": "2012_VVOL",
+				"type": "String"
+			},
+			{
+				"name": "2013_VVOL",
+				"type": "String"
+			},
+			{
+				"name": "2014_VVOL",
+				"type": "String"
+			},
+			{
+				"name": "2015_VVOL",
+				"type": "String"
+			},
+			{
+				"name": "2016_VVOL",
+				"type": "String"
+			},
+			{
+				"name": "2017_VVOL",
+				"type": "String"
+			},
+			{
+				"name": "2018_VVOL",
+				"type": "String"
+			},
+			{
+				"name": "2019_VVOL",
+				"type": "String"
+			},
+			{
+				"name": "2020_VVOL",
+				"type": "String"
+			},
+			{
+				"name": "2021_VVOL",
+				"type": "String"
+			},
+			{
+				"name": "2022_VVOL",
+				"type": "String"
+			},
+			{
+				"name": "2023_VVOL",
+				"type": "String"
+			},
+			{
+				"name": "2024_VVOL",
+				"type": "String"
+			},
+			{
+				"name": "2025_VVOL",
+				"type": "String"
+			},
+			{
+				"name": "1998_TVOL",
+				"type": "String"
+			},
+			{
+				"name": "1999_TVOL",
+				"type": "String"
+			},
+			{
+				"name": "2000_TVOL",
+				"type": "String"
+			},
+			{
+				"name": "2001_TVOL",
+				"type": "String"
+			},
+			{
+				"name": "2002_TVOL",
+				"type": "String"
+			},
+			{
+				"name": "2003_TVOL",
+				"type": "String"
+			},
+			{
+				"name": "2004_TVOL",
+				"type": "String"
+			},
+			{
+				"name": "2005_TVOL",
+				"type": "String"
+			},
+			{
+				"name": "2006_TVOL",
+				"type": "String"
+			},
+			{
+				"name": "2007_TVOL",
+				"type": "String"
+			},
+			{
+				"name": "2008_TVOL",
+				"type": "String"
+			},
+			{
+				"name": "2009_TVOL",
+				"type": "String"
+			},
+			{
+				"name": "2010_TVOL",
+				"type": "String"
+			},
+			{
+				"name": "2011_TVOL",
+				"type": "String"
+			},
+			{
+				"name": "2012_TVOL",
+				"type": "String"
+			},
+			{
+				"name": "2013_TVOL",
+				"type": "String"
+			},
+			{
+				"name": "2014_TVOL",
+				"type": "String"
+			},
+			{
+				"name": "2015_TVOL",
+				"type": "String"
+			},
+			{
+				"name": "2016_TVOL",
+				"type": "String"
+			},
+			{
+				"name": "2017_TVOL",
+				"type": "String"
+			},
+			{
+				"name": "2018_TVOL",
+				"type": "String"
+			},
+			{
+				"name": "2019_TVOL",
+				"type": "String"
+			},
+			{
+				"name": "2020_TVOL",
+				"type": "String"
+			},
+			{
+				"name": "2021_TVOL",
+				"type": "String"
+			},
+			{
+				"name": "2022_TVOL",
+				"type": "String"
+			},
+			{
+				"name": "2023_TVOL",
+				"type": "String"
+			},
+			{
+				"name": "2024_TVOL",
+				"type": "String"
+			},
+			{
+				"name": "2025_TVOL",
 				"type": "String"
 			},
 			{
@@ -273,14 +498,6 @@
 			},
 			{
 				"name": "SPARE TIRE SIMPL",
-				"type": "String"
-			},
-			{
-				"name": "Name",
-				"type": "String"
-			},
-			{
-				"name": "Value",
 				"type": "String"
 			}
 		]
