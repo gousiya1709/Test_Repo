@@ -10,7 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"fileName": "1_OE_FAORECAST_OUTPUT1.csv",
+				"fileName": "OE_FAORECAST_OUTPUT1.csv",
 				"folderPath": "Output",
 				"container": "adfdemoc"
 			},
