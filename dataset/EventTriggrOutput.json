@@ -1,0 +1,32 @@
+{
+	"name": "EventTriggrOutput",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorage1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"folderPath": "Event_based_trigger_op",
+				"container": "adfdemoc"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "Department",
+				"type": "String"
+			},
+			{
+				"name": "DepartmentName",
+				"type": "String"
+			}
+		]
+	}
+}

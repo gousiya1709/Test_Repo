@@ -1,0 +1,29 @@
+{
+	"name": "Eventrigger",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Started",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "Event_based_trigger_Pipeline",
+					"type": "PipelineReference"
+				},
+				"parameters": {
+					"Folderpath": "@triggerBody().folderpath",
+					"Filename": "@triggerBody().filename"
+				}
+			}
+		],
+		"type": "BlobEventsTrigger",
+		"typeProperties": {
+			"blobPathBeginsWith": "/adfdemoc/blobs/Event_based_trigger_ip/",
+			"blobPathEndsWith": "*.csv",
+			"ignoreEmptyBlobs": true,
+			"scope": "/subscriptions/9fa57d3b-318f-48b1-a867-f733ebadeb9b/resourceGroups/AzureDemoRG/providers/Microsoft.Storage/storageAccounts/adfdemosc",
+			"events": [
+				"Microsoft.Storage.BlobCreated"
+			]
+		}
+	}
+}
