@@ -20,6 +20,7 @@
 						"storeSettings": {
 							"type": "AzureBlobStorageReadSettings",
 							"recursive": false,
+							"wildcardFolderPath": "Event_based_trigger_ip",
 							"wildcardFileName": "*csv"
 						},
 						"formatSettings": {
