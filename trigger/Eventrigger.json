@@ -1,7 +1,9 @@
 {
 	"name": "Eventrigger",
 	"properties": {
-		"annotations": [],
+		"annotations": [
+			"SCDTYPE1"
+		],
 		"runtimeState": "Started",
 		"pipelines": [
 			{
@@ -13,12 +15,22 @@
 					"Folderpath": "@triggerBody().folderpath",
 					"Filename": "@triggerBody().filename"
 				}
+			},
+			{
+				"pipelineReference": {
+					"referenceName": "SCDType1pipeline",
+					"type": "PipelineReference"
+				},
+				"parameters": {
+					"FolderName": "@triggerBody().folderPath",
+					"Filename": "@triggerBody().fileName"
+				}
 			}
 		],
 		"type": "BlobEventsTrigger",
 		"typeProperties": {
-			"blobPathBeginsWith": "/adfdemoc/blobs/Event_based_trigger_ip/",
-			"blobPathEndsWith": "*csv",
+			"blobPathBeginsWith": "/adfdemoc/blobs/EventtriggerInput/",
+			"blobPathEndsWith": ".csv",
 			"ignoreEmptyBlobs": true,
 			"scope": "/subscriptions/9fa57d3b-318f-48b1-a867-f733ebadeb9b/resourceGroups/AzureDemoRG/providers/Microsoft.Storage/storageAccounts/adfdemosc",
 			"events": [
