@@ -30,7 +30,7 @@
 					"name": "AlterRow1"
 				}
 			],
-			"script": "source(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> SCD1Src\nSCD1Src alterRow(upsertIf(1==1)) ~> AlterRow1\nAlterRow1 sink(input(\n\t\tID as integer,\n\t\tName as string,\n\t\tModel as string,\n\t\tLength as integer\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:false,\n\tupdateable:false,\n\tupsertable:true,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'allErrors',\n\toutputRejectedData: true,\n\trejectedData_container: 'adfdemoc',\n\trejectedData_folderPath: 'EventtriggerOutput',\n\ttransactionCommit: 'single',\n\treportSuccessOnError: true) ~> sink1"
+			"script": "source(output(\n\t\tID as integer,\n\t\tName as string,\n\t\tModel as string,\n\t\tLength as integer\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> SCD1Src\nSCD1Src alterRow(upsertIf(1==1)) ~> AlterRow1\nAlterRow1 sink(input(\n\t\tID as integer,\n\t\tName as string,\n\t\tModel as string,\n\t\tLength as integer\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:false,\n\tupdateable:false,\n\tupsertable:true,\n\tkeys:['ID'],\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'allErrors',\n\toutputRejectedData: true,\n\trejectedData_container: 'adfdemoc',\n\trejectedData_folderPath: 'EventtriggerOutput',\n\ttransactionCommit: 'single',\n\treportSuccessOnError: true) ~> sink1"
 		}
 	}
 }
