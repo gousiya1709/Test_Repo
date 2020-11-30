@@ -27,14 +27,6 @@
 				}
 			}
 		],
-		"parameters": {
-			"FolderName": {
-				"type": "string"
-			},
-			"Filename": {
-				"type": "string"
-			}
-		},
 		"annotations": []
 	}
 }
