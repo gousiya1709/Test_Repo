@@ -15,12 +15,6 @@
 					"Folderpath": "@triggerBody().folderpath",
 					"Filename": "@triggerBody().filename"
 				}
-			},
-			{
-				"pipelineReference": {
-					"referenceName": "SCDType1pipeline",
-					"type": "PipelineReference"
-				}
 			}
 		],
 		"type": "BlobEventsTrigger",
