@@ -26,7 +26,8 @@
 						"exists"
 					],
 					"storeSettings": {
-						"type": "AzureBlobStorageReadSettings"
+						"type": "AzureBlobStorageReadSettings",
+						"recursive": true
 					},
 					"formatSettings": {
 						"type": "DelimitedTextReadSettings"
@@ -47,13 +48,30 @@
 				"userProperties": [],
 				"typeProperties": {
 					"expression": {
-						"value": "@activity('Get Metadata1').output.Lastmodified >",
+						"value": "@activity('Get Metadata1').output.Lastmodified >utcnow()",
 						"type": "Expression"
 					},
+					"ifFalseActivities": [
+						{
+							"name": "WebHook1",
+							"type": "WebHook",
+							"dependsOn": [],
+							"userProperties": [],
+							"typeProperties": {
+								"url": "https://prod-54.eastus.logic.azure.com:443/workflows/be65faf437d44de49a61260d79923416/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=g-Ax8281_OLfdJpiEwUsbhzYCyuW1q16kt2B3uqxrok",
+								"method": "POST",
+								"headers": {
+									"Content-type": "application\\json"
+								},
+								"body": "",
+								"timeout": "00:10:00"
+							}
+						}
+					],
 					"ifTrueActivities": [
 						{
-							"name": "Web1",
-							"type": "WebActivity",
+							"name": "SCD1_DATAFLOW",
+							"type": "ExecuteDataFlow",
 							"dependsOn": [],
 							"policy": {
 								"timeout": "7.00:00:00",
@@ -62,17 +80,23 @@
 								"secureOutput": false,
 								"secureInput": false
 							},
-							"userProperties": []
+							"userProperties": [],
+							"typeProperties": {
+								"dataflow": {
+									"referenceName": "SCD1_DATAFLOW",
+									"type": "DataFlowReference"
+								},
+								"compute": {
+									"coreCount": 8,
+									"computeType": "General"
+								},
+								"traceLevel": "Fine"
+							}
 						}
 					]
 				}
 			}
 		],
-		"parameters": {
-			"Runtime": {
-				"type": "string"
-			}
-		},
 		"annotations": []
 	}
 }
