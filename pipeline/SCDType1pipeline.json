@@ -19,7 +19,9 @@
 						"type": "DelimitedTextSource",
 						"storeSettings": {
 							"type": "AzureBlobStorageReadSettings",
-							"recursive": true
+							"recursive": true,
+							"wildcardFolderPath": "Event/",
+							"wildcardFileName": "*"
 						},
 						"formatSettings": {
 							"type": "DelimitedTextReadSettings"
