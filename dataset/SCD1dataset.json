@@ -10,6 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
+				"fileName": "Cars_Data_1.csv",
 				"folderPath": "Event",
 				"container": "adfdemoc"
 			},
