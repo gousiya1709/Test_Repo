@@ -38,6 +38,10 @@
 		"Eventrigger_properties_typeProperties_scope": {
 			"type": "string",
 			"defaultValue": "/subscriptions/9fa57d3b-318f-48b1-a867-f733ebadeb9b/resourceGroups/AzureDemoRG/providers/Microsoft.Storage/storageAccounts/adfdemosc"
+		},
+		"trigger1_properties_typeProperties_scope": {
+			"type": "string",
+			"defaultValue": "/subscriptions/9fa57d3b-318f-48b1-a867-f733ebadeb9b/resourceGroups/AzureDemoRG/providers/Microsoft.Storage/storageAccounts/adfdemosc"
 		}
 	},
 	"variables": {
@@ -3890,13 +3894,6 @@
 							"Folderpath": "[parameters('Eventrigger_properties_Event_based_trigger_Pipeline_parameters_Folderpath')]",
 							"Filename": "[parameters('Eventrigger_properties_Event_based_trigger_Pipeline_parameters_Filename')]"
 						}
-					},
-					{
-						"pipelineReference": {
-							"referenceName": "SCDType1pipeline",
-							"type": "PipelineReference"
-						},
-						"parameters": {}
 					}
 				],
 				"type": "BlobEventsTrigger",
@@ -3910,8 +3907,7 @@
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/pipelines/Event_based_trigger_Pipeline')]",
-				"[concat(variables('factoryId'), '/pipelines/SCDType1pipeline')]"
+				"[concat(variables('factoryId'), '/pipelines/Event_based_trigger_Pipeline')]"
 			]
 		},
 		{
@@ -3965,6 +3961,36 @@
 				"[concat(variables('factoryId'), '/datasets/SCD1dataset')]",
 				"[concat(variables('factoryId'), '/datasets/SCD1SQLdataset')]",
 				"[concat(variables('factoryId'), '/linkedServices/AzureBlobStorage1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/trigger1')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Stopped",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "SCDType1pipeline",
+							"type": "PipelineReference"
+						},
+						"parameters": {}
+					}
+				],
+				"type": "BlobEventsTrigger",
+				"typeProperties": {
+					"blobPathBeginsWith": "/adfdemoc/blobs/Event/",
+					"ignoreEmptyBlobs": true,
+					"scope": "[parameters('trigger1_properties_typeProperties_scope')]",
+					"events": [
+						"Microsoft.Storage.BlobCreated"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/SCDType1pipeline')]"
 			]
 		}
 	]
