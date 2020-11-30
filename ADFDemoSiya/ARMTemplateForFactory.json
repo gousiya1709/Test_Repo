@@ -1918,7 +1918,9 @@
 								"type": "DelimitedTextSource",
 								"storeSettings": {
 									"type": "AzureBlobStorageReadSettings",
-									"recursive": true
+									"recursive": true,
+									"wildcardFolderPath": "Event/",
+									"wildcardFileName": "*"
 								},
 								"formatSettings": {
 									"type": "DelimitedTextReadSettings"
@@ -1938,56 +1940,6 @@
 							"enableStaging": false,
 							"translator": {
 								"type": "TabularTranslator",
-								"mappings": [
-									{
-										"source": {
-											"name": "ID",
-											"type": "String",
-											"physicalType": "String"
-										},
-										"sink": {
-											"name": "ID",
-											"type": "String",
-											"physicalType": "String"
-										}
-									},
-									{
-										"source": {
-											"name": "Name",
-											"type": "String",
-											"physicalType": "String"
-										},
-										"sink": {
-											"name": "Name",
-											"type": "String",
-											"physicalType": "String"
-										}
-									},
-									{
-										"source": {
-											"name": "Model",
-											"type": "String",
-											"physicalType": "String"
-										},
-										"sink": {
-											"name": "Model",
-											"type": "String",
-											"physicalType": "String"
-										}
-									},
-									{
-										"source": {
-											"name": "Length",
-											"type": "String",
-											"physicalType": "String"
-										},
-										"sink": {
-											"name": "Length",
-											"type": "String",
-											"physicalType": "String"
-										}
-									}
-								],
 								"typeConversion": true,
 								"typeConversionSettings": {
 									"allowDataTruncation": true,
@@ -3545,8 +3497,7 @@
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobStorageLocation",
-						"fileName": "Cars_Data_1.csv",
-						"folderPath": "Event",
+						"folderPath": "Event/",
 						"container": "adfdemoc"
 					},
 					"columnDelimiter": ",",
