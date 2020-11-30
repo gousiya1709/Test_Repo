@@ -20,13 +20,9 @@
 						"type": "DatasetReference"
 					},
 					"fieldList": [
-						"size",
-						"columnCount",
-						"structure",
 						"itemName",
 						"itemType",
 						"lastModified",
-						"contentMD5",
 						"exists"
 					],
 					"storeSettings": {
@@ -51,7 +47,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"expression": {
-						"value": "@activity('Get Metadata1').output.Size==0",
+						"value": "@activity('Get Metadata1').output.Lastmodified >",
 						"type": "Expression"
 					},
 					"ifTrueActivities": [
@@ -72,6 +68,11 @@
 				}
 			}
 		],
+		"parameters": {
+			"Runtime": {
+				"type": "string"
+			}
+		},
 		"annotations": []
 	}
 }
