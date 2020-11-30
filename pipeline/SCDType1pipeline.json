@@ -63,7 +63,10 @@
 								"headers": {
 									"Content-type": "application\\json"
 								},
-								"body": "",
+								"body": {
+									"value": "{\n\"title\" : \"Pipeline run failed\",\n\"message\" : \"SCDTYPE1 Pipeline failed\",\n\"datafactoryname\" : \"@{pipeline().DataFactory}\",\n\"pipelinename\" : \"@{pipeline().Pipeline}\",\n\"pipelinerunid\" : \"@{pipeline().RunId}\",\n\"time\" : \"@{utcnow()}\",\n}",
+									"type": "Expression"
+								},
 								"timeout": "00:10:00"
 							}
 						}
