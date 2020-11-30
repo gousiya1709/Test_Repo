@@ -4,7 +4,7 @@
 		"annotations": [
 			"SCDTYPE1"
 		],
-		"runtimeState": "Started",
+		"runtimeState": "Stopped",
 		"pipelines": [
 			{
 				"pipelineReference": {
