@@ -10,7 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"folderPath": "Event_based_trigger_ip",
+				"folderPath": "Event",
 				"container": "adfdemoc"
 			},
 			"columnDelimiter": ",",
