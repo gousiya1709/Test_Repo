@@ -1,0 +1,33 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "ADFDemoSiya"
+		},
+		"AzureBlobStorage1_connectionString": {
+			"value": ""
+		},
+		"AzureSqlDatabaseLinkedservice_connectionString": {
+			"value": ""
+		},
+		"CosmosDb_connectionString": {
+			"value": ""
+		},
+		"AzureBlobStorage2_properties_typeProperties_connectionString_secretName": {
+			"value": "ConnectionStringSecret"
+		},
+		"AzureKeyVault1_properties_typeProperties_baseUrl": {
+			"value": "https://SiyaKeyVault.vault.azure.net/"
+		},
+		"Eventrigger_properties_Event_based_trigger_Pipeline_parameters_Folderpath": {
+			"value": "@triggerBody().folderpath"
+		},
+		"Eventrigger_properties_Event_based_trigger_Pipeline_parameters_Filename": {
+			"value": "@triggerBody().filename"
+		},
+		"Eventrigger_properties_typeProperties_scope": {
+			"value": "/subscriptions/9fa57d3b-318f-48b1-a867-f733ebadeb9b/resourceGroups/AzureDemoRG/providers/Microsoft.Storage/storageAccounts/adfdemosc"
+		}
+	}
+}

@@ -1,0 +1,1597 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "ADFDemoSiya"
+		},
+		"AzureBlobStorage1_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzureBlobStorage1'"
+		},
+		"AzureSqlDatabaseLinkedservice_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzureSqlDatabaseLinkedservice'"
+		},
+		"CosmosDb_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'CosmosDb'"
+		},
+		"AzureKeyVault1_properties_typeProperties_baseUrl": {
+			"type": "string",
+			"defaultValue": "https://SiyaKeyVault.vault.azure.net/"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/pipeline_AppendVar')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Append List of Files",
+						"type": "AppendVariable",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "ListofFiles",
+							"value": {
+								"value": "@pipeline().parameters.Filename",
+								"type": "Expression"
+							}
+						}
+					}
+				],
+				"parameters": {
+					"Filename": {
+						"type": "string",
+						"defaultValue": "SalesIndia.txt"
+					}
+				},
+				"variables": {
+					"ListofFiles": {
+						"type": "Array",
+						"defaultValue": [
+							"SalesUS",
+							"SalesUK"
+						]
+					}
+				},
+				"annotations": [],
+				"lastPublishTime": "2020-11-11T18:32:46Z"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pipeline_Filter')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Filter1",
+						"type": "Filter",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@pipeline().parameters.ListofValues",
+								"type": "Expression"
+							},
+							"condition": {
+								"value": "@greater(item(),3)",
+								"type": "Expression"
+							}
+						}
+					}
+				],
+				"parameters": {
+					"ListofValues": {
+						"type": "array",
+						"defaultValue": [
+							1,
+							2,
+							3,
+							4,
+							5,
+							6,
+							7
+						]
+					}
+				},
+				"annotations": [],
+				"lastPublishTime": "2020-11-11T18:38:21Z"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pipeline_setvariable')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Set variable1",
+						"type": "SetVariable",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "Filetype",
+							"value": {
+								"value": "@replace(pipeline().parameters.Filename,'Sales','')",
+								"type": "Expression"
+							}
+						}
+					}
+				],
+				"parameters": {
+					"Filename": {
+						"type": "string",
+						"defaultValue": "DailySales"
+					}
+				},
+				"variables": {
+					"Filetype": {
+						"type": "String"
+					}
+				},
+				"annotations": [],
+				"lastPublishTime": "2020-11-11T18:20:27Z"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureBlobStorage1')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobStorage",
+				"typeProperties": {
+					"connectionString": "[parameters('AzureBlobStorage1_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureKeyVault1')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureKeyVault",
+				"typeProperties": {
+					"baseUrl": "[parameters('AzureKeyVault1_properties_typeProperties_baseUrl')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureSqlDatabaseLinkedservice')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureSqlDatabase",
+				"typeProperties": {
+					"connectionString": "[parameters('AzureSqlDatabaseLinkedservice_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/CosmosDb')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "CosmosDb",
+				"typeProperties": {
+					"connectionString": "[parameters('CosmosDb_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/integrationRuntime1')]",
+			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "SelfHosted",
+				"typeProperties": {}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/StoredProcedure_Systemvariables')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Stored procedure1",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[dbo].[sp_logpipelineexecdetails]",
+							"storedProcedureParameters": {
+								"DFname": {
+									"value": {
+										"value": "@pipeline().DataFactory",
+										"type": "Expression"
+									},
+									"type": "String"
+								},
+								"pipelinename": {
+									"value": {
+										"value": "@pipeline().Pipeline",
+										"type": "Expression"
+									},
+									"type": "String"
+								},
+								"pipelinerunid": {
+									"value": {
+										"value": "@pipeline().RunId",
+										"type": "Expression"
+									},
+									"type": "String"
+								},
+								"pipelineruntime": {
+									"value": {
+										"value": "@pipeline().TriggerTime",
+										"type": "Expression"
+									},
+									"type": "String"
+								},
+								"pipelinetriggername": {
+									"value": {
+										"value": "@pipeline().TriggerName",
+										"type": "Expression"
+									},
+									"type": "String"
+								}
+							}
+						},
+						"linkedServiceName": {
+							"referenceName": "AzureSqlDatabaseLinkedservice",
+							"type": "LinkedServiceReference"
+						}
+					}
+				],
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureSqlDatabaseLinkedservice')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureSqlTable1')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureSqlDatabaseLinkedservice",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "OriginalSize",
+						"type": "varchar"
+					},
+					{
+						"name": "CorrectedSize",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "OE_Forecast_Size_Corrctn"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureSqlDatabaseLinkedservice')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureSqlTable2')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureSqlDatabaseLinkedservice",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "OriginalSpeedRating",
+						"type": "varchar"
+					},
+					{
+						"name": "NewSpeedRating",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "OE_Forecast_SpeedRatng"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureSqlDatabaseLinkedservice')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureSqlTable3')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureSqlDatabaseLinkedservice",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "OETireSize",
+						"type": "varchar"
+					},
+					{
+						"name": "LoadRange",
+						"type": "varchar"
+					},
+					{
+						"name": "Date_Updated",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "OE_Forecast_Loadrange"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureSqlDatabaseLinkedservice')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureSqlTable4')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureSqlDatabaseLinkedservice",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "VehicleSaleCountry",
+						"type": "varchar"
+					},
+					{
+						"name": "VehicleSourceCountry",
+						"type": "varchar"
+					},
+					{
+						"name": "VehicleSourceClassification",
+						"type": "varchar"
+					},
+					{
+						"name": "Markitcode",
+						"type": "varchar"
+					},
+					{
+						"name": "MCODE",
+						"type": "varchar"
+					},
+					{
+						"name": "TCODE",
+						"type": "varchar"
+					},
+					{
+						"name": "VehicleSalesParent",
+						"type": "varchar"
+					},
+					{
+						"name": "VehicleMacroSegment",
+						"type": "varchar"
+					},
+					{
+						"name": "VehicleSubsegment",
+						"type": "varchar"
+					},
+					{
+						"name": "VehicleMicroSegment",
+						"type": "varchar"
+					},
+					{
+						"name": "VehiclePlatform",
+						"type": "varchar"
+					},
+					{
+						"name": "VehicleBrand",
+						"type": "varchar"
+					},
+					{
+						"name": "VehicleModel",
+						"type": "varchar"
+					},
+					{
+						"name": "VehicleTrim",
+						"type": "varchar"
+					},
+					{
+						"name": "VehicleElectricIndicator",
+						"type": "varchar"
+					},
+					{
+						"name": "VehicleBodyStyle",
+						"type": "varchar"
+					},
+					{
+						"name": "VehicleNumberofDoors",
+						"type": "varchar"
+					},
+					{
+						"name": "VehicleDriveType",
+						"type": "varchar"
+					},
+					{
+						"name": "VehicleLastUpdate",
+						"type": "varchar"
+					},
+					{
+						"name": "VehicleSeries",
+						"type": "varchar"
+					},
+					{
+						"name": "TirePrefix",
+						"type": "varchar"
+					},
+					{
+						"name": "TireSectionWidth",
+						"type": "varchar"
+					},
+					{
+						"name": "TireAspectRatio",
+						"type": "varchar"
+					},
+					{
+						"name": "TireConstruction",
+						"type": "varchar"
+					},
+					{
+						"name": "TireRimDiameter",
+						"type": "varchar"
+					},
+					{
+						"name": "TireLoadIndex",
+						"type": "varchar"
+					},
+					{
+						"name": "TireSpeedRating",
+						"type": "varchar"
+					},
+					{
+						"name": "TireTotalSize",
+						"type": "varchar"
+					},
+					{
+						"name": "TireSize",
+						"type": "varchar"
+					},
+					{
+						"name": "FrontvsRearTireDifferent",
+						"type": "varchar"
+					},
+					{
+						"name": "TireParent",
+						"type": "varchar"
+					},
+					{
+						"name": "TireBrand",
+						"type": "varchar"
+					},
+					{
+						"name": "TireModel",
+						"type": "varchar"
+					},
+					{
+						"name": "RMATireCategory",
+						"type": "varchar"
+					},
+					{
+						"name": "RMAVehicleApp",
+						"type": "varchar"
+					},
+					{
+						"name": "RMASegment",
+						"type": "varchar"
+					},
+					{
+						"name": "ReportingSegment",
+						"type": "varchar"
+					},
+					{
+						"name": "TireDesignation",
+						"type": "varchar"
+					},
+					{
+						"name": "TireApplication",
+						"type": "varchar"
+					},
+					{
+						"name": "TireSidewall",
+						"type": "varchar"
+					},
+					{
+						"name": "WheelType",
+						"type": "varchar"
+					},
+					{
+						"name": "TireRunFlatTechnology",
+						"type": "varchar"
+					},
+					{
+						"name": "TirePressureMonitoring",
+						"type": "varchar"
+					},
+					{
+						"name": "SupplierofTirePressureMonitoring",
+						"type": "varchar"
+					},
+					{
+						"name": "SpareDetail",
+						"type": "varchar"
+					},
+					{
+						"name": "VehicleUpdatedSegment",
+						"type": "varchar"
+					},
+					{
+						"name": "VehicleUpdatedBodytype",
+						"type": "varchar"
+					},
+					{
+						"name": "VehicleRegionalSegment",
+						"type": "varchar"
+					},
+					{
+						"name": "VehicleRegionalPriceClass",
+						"type": "varchar"
+					},
+					{
+						"name": "VehicleGlobalSegment",
+						"type": "varchar"
+					},
+					{
+						"name": "VehicleGlobalSubsegment",
+						"type": "varchar"
+					},
+					{
+						"name": "VehicleGlobalPriceClass",
+						"type": "varchar"
+					},
+					{
+						"name": "VehicleProgram",
+						"type": "varchar"
+					},
+					{
+						"name": "SimpleRunFlatDetail",
+						"type": "varchar"
+					},
+					{
+						"name": "SimpleSpareDetail",
+						"type": "varchar"
+					},
+					{
+						"name": "VehicleModelYear",
+						"type": "varchar"
+					},
+					{
+						"name": "TireVolume",
+						"type": "varchar"
+					},
+					{
+						"name": "VehicleSalesVolume",
+						"type": "varchar"
+					},
+					{
+						"name": "TirePosition",
+						"type": "varchar"
+					},
+					{
+						"name": "TimestampofData",
+						"type": "date"
+					},
+					{
+						"name": "TimestampTimezone",
+						"type": "varchar"
+					},
+					{
+						"name": "TireLoadRange",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "OE_Forecast_Output_Azure"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureSqlDatabaseLinkedservice')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DatasetDept')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureBlobStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "DRVD_2",
+						"folderPath": "input",
+						"container": "adfdemoc"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "Department",
+						"type": "String"
+					},
+					{
+						"name": "DepartmentName",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureBlobStorage1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DatasetSnk')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureBlobStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "TIRE_FORECAST_US_CAN_1020_w_HIST_updated_111720.xlsx.csv",
+						"folderPath": "output",
+						"container": "adfdemoc"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "SALE COUNTRY",
+						"type": "String"
+					},
+					{
+						"name": "VEH_SOURCE",
+						"type": "String"
+					},
+					{
+						"name": "IMPORT / DOMESTIC",
+						"type": "String"
+					},
+					{
+						"name": "Mnemonic Only",
+						"type": "String"
+					},
+					{
+						"name": "Vehicle Sales: Mnemonic - Vehicle/Country or MCODE",
+						"type": "String"
+					},
+					{
+						"name": "TCODE",
+						"type": "String"
+					},
+					{
+						"name": "Vehicle Sales: Sales Parent or GROUP",
+						"type": "String"
+					},
+					{
+						"name": "Vehicle Sales: Car/Truck or MACRO LEVEL SEGMENT",
+						"type": "String"
+					},
+					{
+						"name": "Vehicle Sales: Regional Sub-Segment or MODIFIED SEGMENT",
+						"type": "String"
+					},
+					{
+						"name": "Regional Segment  Concat or DRI SEGMENT",
+						"type": "String"
+					},
+					{
+						"name": "Vehicle Sales: Platform",
+						"type": "String"
+					},
+					{
+						"name": "Vehicle Sales: Brand",
+						"type": "String"
+					},
+					{
+						"name": "Vehicle Sales: Nameplate or MODEL",
+						"type": "String"
+					},
+					{
+						"name": "TRIM",
+						"type": "String"
+					},
+					{
+						"name": "Electric",
+						"type": "String"
+					},
+					{
+						"name": "Vehicle Sales: Body Type or BODYSTYLE",
+						"type": "String"
+					},
+					{
+						"name": "DOORS",
+						"type": "String"
+					},
+					{
+						"name": "DRIVETYPE",
+						"type": "String"
+					},
+					{
+						"name": "LAST UPDATE",
+						"type": "String"
+					},
+					{
+						"name": "SERIES",
+						"type": "String"
+					},
+					{
+						"name": "TYPE_F",
+						"type": "String"
+					},
+					{
+						"name": "SECTION WIDTH",
+						"type": "String"
+					},
+					{
+						"name": "ASPECT RATIO",
+						"type": "String"
+					},
+					{
+						"name": "TYPE CONSTRUCTION",
+						"type": "String"
+					},
+					{
+						"name": "RIM DIAMETER",
+						"type": "String"
+					},
+					{
+						"name": "LOAD INDEX",
+						"type": "String"
+					},
+					{
+						"name": "SPEED SYMBOL",
+						"type": "String"
+					},
+					{
+						"name": "FRONT_SIZE",
+						"type": "String"
+					},
+					{
+						"name": "CORE_F_SIZE",
+						"type": "String"
+					},
+					{
+						"name": "CHECK INFO F TO B",
+						"type": "String"
+					},
+					{
+						"name": "TYPE_R",
+						"type": "String"
+					},
+					{
+						"name": "REAR SECTION WIDTH",
+						"type": "String"
+					},
+					{
+						"name": "REAR ASPECT RATIO",
+						"type": "String"
+					},
+					{
+						"name": "REAR TYPE CONSTRUCTION",
+						"type": "String"
+					},
+					{
+						"name": "REAR RIM DIAMETER",
+						"type": "String"
+					},
+					{
+						"name": "REAR LOAD INDEX",
+						"type": "String"
+					},
+					{
+						"name": "REAR SPEED SYMBOL",
+						"type": "String"
+					},
+					{
+						"name": "REAR_SIZE",
+						"type": "String"
+					},
+					{
+						"name": "CORE_R_SIZE",
+						"type": "String"
+					},
+					{
+						"name": "TIRE PARENT",
+						"type": "String"
+					},
+					{
+						"name": "TIRE_BRAND",
+						"type": "String"
+					},
+					{
+						"name": "TIRE_MODEL",
+						"type": "String"
+					},
+					{
+						"name": "Tire Category",
+						"type": "String"
+					},
+					{
+						"name": "Vehicle App",
+						"type": "String"
+					},
+					{
+						"name": "Segment",
+						"type": "String"
+					},
+					{
+						"name": "Reporting Segment",
+						"type": "String"
+					},
+					{
+						"name": "Tire Designation",
+						"type": "String"
+					},
+					{
+						"name": "AS / SUM / WIN / LRR  APPLIES TO OEM MARKETING",
+						"type": "String"
+					},
+					{
+						"name": "SIDEWALL",
+						"type": "String"
+					},
+					{
+						"name": "WHEEL TYPE",
+						"type": "String"
+					},
+					{
+						"name": "RUN_FLAT DETAIL  (INTERNAL TO TIRE)",
+						"type": "String"
+					},
+					{
+						"name": "PRES_MON",
+						"type": "String"
+					},
+					{
+						"name": "MON_SUPP",
+						"type": "String"
+					},
+					{
+						"name": "SPARE DETAIL  (EXTERNAL TO TIRE)",
+						"type": "String"
+					},
+					{
+						"name": "1998_VVOL",
+						"type": "String"
+					},
+					{
+						"name": "1999_VVOL",
+						"type": "String"
+					},
+					{
+						"name": "2000_VVOL",
+						"type": "String"
+					},
+					{
+						"name": "2001_VVOL",
+						"type": "String"
+					},
+					{
+						"name": "2002_VVOL",
+						"type": "String"
+					},
+					{
+						"name": "2003_VVOL",
+						"type": "String"
+					},
+					{
+						"name": "2004_VVOL",
+						"type": "String"
+					},
+					{
+						"name": "2005_VVOL",
+						"type": "String"
+					},
+					{
+						"name": "2006_VVOL",
+						"type": "String"
+					},
+					{
+						"name": "2007_VVOL",
+						"type": "String"
+					},
+					{
+						"name": "2008_VVOL",
+						"type": "String"
+					},
+					{
+						"name": "2009_VVOL",
+						"type": "String"
+					},
+					{
+						"name": "2010_VVOL",
+						"type": "String"
+					},
+					{
+						"name": "2011_VVOL",
+						"type": "String"
+					},
+					{
+						"name": "2012_VVOL",
+						"type": "String"
+					},
+					{
+						"name": "2013_VVOL",
+						"type": "String"
+					},
+					{
+						"name": "2014_VVOL",
+						"type": "String"
+					},
+					{
+						"name": "2015_VVOL",
+						"type": "String"
+					},
+					{
+						"name": "2016_VVOL",
+						"type": "String"
+					},
+					{
+						"name": "2017_VVOL",
+						"type": "String"
+					},
+					{
+						"name": "2018_VVOL",
+						"type": "String"
+					},
+					{
+						"name": "2019_VVOL",
+						"type": "String"
+					},
+					{
+						"name": "2020_VVOL",
+						"type": "String"
+					},
+					{
+						"name": "2021_VVOL",
+						"type": "String"
+					},
+					{
+						"name": "2022_VVOL",
+						"type": "String"
+					},
+					{
+						"name": "2023_VVOL",
+						"type": "String"
+					},
+					{
+						"name": "2024_VVOL",
+						"type": "String"
+					},
+					{
+						"name": "2025_VVOL",
+						"type": "String"
+					},
+					{
+						"name": "1998_TVOL",
+						"type": "String"
+					},
+					{
+						"name": "1999_TVOL",
+						"type": "String"
+					},
+					{
+						"name": "2000_TVOL",
+						"type": "String"
+					},
+					{
+						"name": "2001_TVOL",
+						"type": "String"
+					},
+					{
+						"name": "2002_TVOL",
+						"type": "String"
+					},
+					{
+						"name": "2003_TVOL",
+						"type": "String"
+					},
+					{
+						"name": "2004_TVOL",
+						"type": "String"
+					},
+					{
+						"name": "2005_TVOL",
+						"type": "String"
+					},
+					{
+						"name": "2006_TVOL",
+						"type": "String"
+					},
+					{
+						"name": "2007_TVOL",
+						"type": "String"
+					},
+					{
+						"name": "2008_TVOL",
+						"type": "String"
+					},
+					{
+						"name": "2009_TVOL",
+						"type": "String"
+					},
+					{
+						"name": "2010_TVOL",
+						"type": "String"
+					},
+					{
+						"name": "2011_TVOL",
+						"type": "String"
+					},
+					{
+						"name": "2012_TVOL",
+						"type": "String"
+					},
+					{
+						"name": "2013_TVOL",
+						"type": "String"
+					},
+					{
+						"name": "2014_TVOL",
+						"type": "String"
+					},
+					{
+						"name": "2015_TVOL",
+						"type": "String"
+					},
+					{
+						"name": "2016_TVOL",
+						"type": "String"
+					},
+					{
+						"name": "2017_TVOL",
+						"type": "String"
+					},
+					{
+						"name": "2018_TVOL",
+						"type": "String"
+					},
+					{
+						"name": "2019_TVOL",
+						"type": "String"
+					},
+					{
+						"name": "2020_TVOL",
+						"type": "String"
+					},
+					{
+						"name": "2021_TVOL",
+						"type": "String"
+					},
+					{
+						"name": "2022_TVOL",
+						"type": "String"
+					},
+					{
+						"name": "2023_TVOL",
+						"type": "String"
+					},
+					{
+						"name": "2024_TVOL",
+						"type": "String"
+					},
+					{
+						"name": "2025_TVOL",
+						"type": "String"
+					},
+					{
+						"name": "Updated Segment",
+						"type": "String"
+					},
+					{
+						"name": "Updated Bodytype",
+						"type": "String"
+					},
+					{
+						"name": "Vehicle Sales: Regional Segment",
+						"type": "String"
+					},
+					{
+						"name": "Vehicle Sales: Regional Price Class",
+						"type": "String"
+					},
+					{
+						"name": "Global Sales Segment",
+						"type": "String"
+					},
+					{
+						"name": "Global Sales Sub-segment",
+						"type": "String"
+					},
+					{
+						"name": "Global Sales Price Class",
+						"type": "String"
+					},
+					{
+						"name": "Vehicle Sales: Program",
+						"type": "String"
+					},
+					{
+						"name": "RUN_FLAT SIMPL",
+						"type": "String"
+					},
+					{
+						"name": "SPARE TIRE SIMPL",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureBlobStorage1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DatasetSrc')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureBlobStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"folderPath": "input",
+						"container": "adfdemoc"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureBlobStorage1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Deleted_Dataset')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureBlobStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Binary",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"folderPath": "Output",
+						"container": "adfdemoc"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureBlobStorage1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DelimitedText1')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureBlobStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "OE_FAORECAST_OUTPUT1.csv",
+						"folderPath": "Output",
+						"container": "adfdemoc"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "Vehicle Sale Country",
+						"type": "String"
+					},
+					{
+						"name": "Vehicle Source Country",
+						"type": "String"
+					},
+					{
+						"name": "Vehicle Source Classification",
+						"type": "String"
+					},
+					{
+						"name": "Markit code",
+						"type": "String"
+					},
+					{
+						"name": "MCODE",
+						"type": "String"
+					},
+					{
+						"name": "TCODE",
+						"type": "String"
+					},
+					{
+						"name": "Vehicle Sales Parent",
+						"type": "String"
+					},
+					{
+						"name": "Vehicle Macro Segment",
+						"type": "String"
+					},
+					{
+						"name": "Vehicle Sub-segment",
+						"type": "String"
+					},
+					{
+						"name": "Vehicle Micro Segment",
+						"type": "String"
+					},
+					{
+						"name": "Vehicle Platform",
+						"type": "String"
+					},
+					{
+						"name": "Vehicle Brand",
+						"type": "String"
+					},
+					{
+						"name": "Vehicle Model",
+						"type": "String"
+					},
+					{
+						"name": "Vehicle Trim",
+						"type": "String"
+					},
+					{
+						"name": "Vehicle Electric Indicator",
+						"type": "String"
+					},
+					{
+						"name": "Vehicle Body Style",
+						"type": "String"
+					},
+					{
+						"name": "Vehicle Number of Doors",
+						"type": "String"
+					},
+					{
+						"name": "Vehicle Drive Type",
+						"type": "String"
+					},
+					{
+						"name": "Vehicle Last Update",
+						"type": "String"
+					},
+					{
+						"name": "Vehicle Series",
+						"type": "String"
+					},
+					{
+						"name": "Tire Prefix",
+						"type": "String"
+					},
+					{
+						"name": "Tire Section Width",
+						"type": "String"
+					},
+					{
+						"name": "Tire Aspect Ratio",
+						"type": "String"
+					},
+					{
+						"name": "Tire Construction",
+						"type": "String"
+					},
+					{
+						"name": "Tire Rim Diameter",
+						"type": "String"
+					},
+					{
+						"name": "Tire Load Index",
+						"type": "String"
+					},
+					{
+						"name": "Tire Speed Rating",
+						"type": "String"
+					},
+					{
+						"name": "Tire Total Size",
+						"type": "String"
+					},
+					{
+						"name": "Tire Size",
+						"type": "String"
+					},
+					{
+						"name": "Front vs Rear Tire Different",
+						"type": "String"
+					},
+					{
+						"name": "Tire Parent",
+						"type": "String"
+					},
+					{
+						"name": "Tire Brand",
+						"type": "String"
+					},
+					{
+						"name": "Tire Model",
+						"type": "String"
+					},
+					{
+						"name": "RMA Tire Category",
+						"type": "String"
+					},
+					{
+						"name": "RMA Vehicle App",
+						"type": "String"
+					},
+					{
+						"name": "RMA Segment",
+						"type": "String"
+					},
+					{
+						"name": "Reporting Segment",
+						"type": "String"
+					},
+					{
+						"name": "Tire Designation",
+						"type": "String"
+					},
+					{
+						"name": "Tire Application",
+						"type": "String"
+					},
+					{
+						"name": "Tire Sidewall",
+						"type": "String"
+					},
+					{
+						"name": "Wheel Type",
+						"type": "String"
+					},
+					{
+						"name": "Tire Run Flat Technology",
+						"type": "String"
+					},
+					{
+						"name": "Tire Pressure Monitoring",
+						"type": "String"
+					},
+					{
+						"name": "Supplier of Tire Pressure Monitoring",
+						"type": "String"
+					},
+					{
+						"name": "Spare Detail",
+						"type": "String"
+					},
+					{
+						"name": "Vehicle Updated Segment",
+						"type": "String"
+					},
+					{
+						"name": "Vehicle Updated Bodytype",
+						"type": "String"
+					},
+					{
+						"name": "Vehicle Regional Segment",
+						"type": "String"
+					},
+					{
+						"name": "Vehicle Regional Price Class",
+						"type": "String"
+					},
+					{
+						"name": "Vehicle Global Segment",
+						"type": "String"
+					},
+					{
+						"name": "Vehicle Global Subsegment",
+						"type": "String"
+					},
+					{
+						"name": "Vehicle Global Price Class",
+						"type": "String"
+					},
+					{
+						"name": "Vehicle Program",
+						"type": "String"
+					},
+					{
+						"name": "Simple Run Flat Detail",
+						"type": "String"
+					},
+					{
+						"name": "Simple Spare Detail",
+						"type": "String"
+					},
+					{
+						"name": "Vehicle Model Year",
+						"type": "String"
+					},
+					{
+						"name": "Tire Volume",
+						"type": "String"
+					},
+					{
+						"name": "Vehicle Sales Volume",
+						"type": "String"
+					},
+					{
+						"name": "Tire Position",
+						"type": "String"
+					},
+					{
+						"name": "Timestamp of Data",
+						"type": "String"
+					},
+					{
+						"name": "Timestamp Timezone",
+						"type": "String"
+					},
+					{
+						"name": "Tire Load Range",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureBlobStorage1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/EventTriggrInput')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureBlobStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"folderPath": "Event_based_trigger_ip",
+						"container": "adfdemoc"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "Department",
+						"type": "String"
+					},
+					{
+						"name": "DepartmentName",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureBlobStorage1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/EventTriggrOutput')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureBlobStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"folderPath": "Event_based_trigger_op",
+						"container": "adfdemoc"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "Department",
+						"type": "String"
+					},
+					{
+						"name": "DepartmentName",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureBlobStorage1')]"
+			]
+		}
+	]
+}
