@@ -1557,7 +1557,8 @@
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobStorageLocation",
-						"folderPath": "Event_based_trigger_ip",
+						"fileName": "Cars_Data_1.csv",
+						"folderPath": "Event",
 						"container": "adfdemoc"
 					},
 					"columnDelimiter": ",",
