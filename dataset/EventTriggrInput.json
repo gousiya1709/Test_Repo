@@ -10,7 +10,8 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"folderPath": "Event/",
+				"fileName": "Cars1.csv",
+				"folderPath": "Event",
 				"container": "adfdemoc"
 			},
 			"columnDelimiter": ",",
