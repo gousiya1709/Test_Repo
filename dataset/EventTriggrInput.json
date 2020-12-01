@@ -6,9 +6,6 @@
 			"type": "LinkedServiceReference"
 		},
 		"parameters": {
-			"DSFolderpath": {
-				"type": "string"
-			},
 			"DSFilename": {
 				"type": "string"
 			}
@@ -20,10 +17,6 @@
 				"type": "AzureBlobStorageLocation",
 				"fileName": {
 					"value": "@dataset().DSFilename",
-					"type": "Expression"
-				},
-				"folderPath": {
-					"value": "@dataset().DSFolderpath",
 					"type": "Expression"
 				},
 				"container": "adfdemoc"
