@@ -27,7 +27,7 @@
 			"value": "@triggerBody().fileName"
 		},
 		"Eventrigger_properties_Event_based_trigger_Pipeline_parameters_Archivepath": {
-			"value": "@triggerBody().Archivepath"
+			"value": "\"adfdemoc/Src_Backup\""
 		},
 		"Eventrigger_properties_typeProperties_scope": {
 			"value": "/subscriptions/9fa57d3b-318f-48b1-a867-f733ebadeb9b/resourceGroups/AzureDemoRG/providers/Microsoft.Storage/storageAccounts/adfdemosc"

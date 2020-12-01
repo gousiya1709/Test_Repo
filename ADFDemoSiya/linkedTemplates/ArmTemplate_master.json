@@ -37,7 +37,7 @@
 		},
 		"Eventrigger_properties_Event_based_trigger_Pipeline_parameters_Archivepath": {
 			"type": "string",
-			"defaultValue": "@triggerBody().Archivepath"
+			"defaultValue": "\"adfdemoc/Src_Backup\""
 		},
 		"Eventrigger_properties_typeProperties_scope": {
 			"type": "string",
