@@ -5,19 +5,7 @@
 			"SCDTYPE1"
 		],
 		"runtimeState": "Started",
-		"pipelines": [
-			{
-				"pipelineReference": {
-					"referenceName": "Event_based_trigger_Pipeline",
-					"type": "PipelineReference"
-				},
-				"parameters": {
-					"PLFolderpath": "@triggerBody().folderPath",
-					"PLFilename": "@triggerBody().fileName",
-					"Archivepath": "adfdemoc/Src_Backup"
-				}
-			}
-		],
+		"pipelines": [],
 		"type": "BlobEventsTrigger",
 		"typeProperties": {
 			"blobPathBeginsWith": "/adfdemoc/blobs/Event/",
