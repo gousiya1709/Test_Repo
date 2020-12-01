@@ -19,12 +19,12 @@
 						"referenceName": "Event_Triggr_Dataflow",
 						"type": "DataFlowReference",
 						"parameters": {
-							"Folderpath": {
-								"value": "'@{pipeline().parameters.Folderpath1}'",
+							"DFolderpath": {
+								"value": "'@{pipeline().parameters.PLFolderpath}'",
 								"type": "Expression"
 							},
-							"Filename": {
-								"value": "'@{pipeline().parameters.Filename1}'",
+							"DFilename": {
+								"value": "'@{pipeline().parameters.PLFilename}'",
 								"type": "Expression"
 							}
 						}
