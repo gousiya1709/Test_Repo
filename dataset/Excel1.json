@@ -8,6 +8,7 @@
 		"annotations": [],
 		"type": "Excel",
 		"typeProperties": {
+			"sheetName": "Loadrange_details",
 			"location": {
 				"type": "AzureBlobStorageLocation",
 				"fileName": "Loadrange_1.xlsx",
