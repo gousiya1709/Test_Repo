@@ -35,7 +35,8 @@
 				"type": "string"
 			},
 			"Archivepath": {
-				"type": "string"
+				"type": "string",
+				"defaultValue": "\"adfdemoc/Src_Backup\""
 			}
 		},
 		"annotations": []

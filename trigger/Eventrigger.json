@@ -14,7 +14,7 @@
 				"parameters": {
 					"Folderpath": "@triggerBody().folderPath",
 					"Filename": "@triggerBody().fileName",
-					"Archivepath": "@triggerBody().Archivepath"
+					"Archivepath": "\"adfdemoc/Src_Backup\""
 				}
 			}
 		],
