@@ -1280,6 +1280,7 @@
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobStorageLocation",
+						"fileName": "*",
 						"folderPath": "Output",
 						"container": "adfdemoc"
 					}
