@@ -19,10 +19,6 @@
 						"referenceName": "Event_Triggr_Dataflow",
 						"type": "DataFlowReference",
 						"parameters": {
-							"DFolderpath": {
-								"value": "'@{pipeline().parameters.PLFolderpath}'",
-								"type": "Expression"
-							},
 							"DFilename": {
 								"value": "'@{pipeline().parameters.PLFilename}'",
 								"type": "Expression"
@@ -30,10 +26,6 @@
 						},
 						"datasetParameters": {
 							"source1": {
-								"DSFolderpath": {
-									"value": "@pipeline().parameters.PLFolderpath",
-									"type": "Expression"
-								},
 								"DSFilename": {
 									"value": "@pipeline().parameters.PLFilename",
 									"type": "Expression"
@@ -50,9 +42,6 @@
 			}
 		],
 		"parameters": {
-			"PLFolderpath": {
-				"type": "string"
-			},
 			"PLFilename": {
 				"type": "string"
 			},
