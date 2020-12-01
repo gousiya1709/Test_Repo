@@ -35,6 +35,10 @@
 			"type": "string",
 			"defaultValue": "@triggerBody().fileName"
 		},
+		"Eventrigger_properties_Event_based_trigger_Pipeline_parameters_Archivepath": {
+			"type": "string",
+			"defaultValue": "@triggerBody().Archivepath"
+		},
 		"Eventrigger_properties_typeProperties_scope": {
 			"type": "string",
 			"defaultValue": "/subscriptions/9fa57d3b-318f-48b1-a867-f733ebadeb9b/resourceGroups/AzureDemoRG/providers/Microsoft.Storage/storageAccounts/adfdemosc"
@@ -118,6 +122,9 @@
 					},
 					"Eventrigger_properties_Event_based_trigger_Pipeline_parameters_Filename": {
 						"value": "[parameters('Eventrigger_properties_Event_based_trigger_Pipeline_parameters_Filename')]"
+					},
+					"Eventrigger_properties_Event_based_trigger_Pipeline_parameters_Archivepath": {
+						"value": "[parameters('Eventrigger_properties_Event_based_trigger_Pipeline_parameters_Archivepath')]"
 					},
 					"Eventrigger_properties_typeProperties_scope": {
 						"value": "[parameters('Eventrigger_properties_typeProperties_scope')]"

@@ -19,6 +19,10 @@
 			"type": "string",
 			"defaultValue": "@triggerBody().fileName"
 		},
+		"Eventrigger_properties_Event_based_trigger_Pipeline_parameters_Archivepath": {
+			"type": "string",
+			"defaultValue": "@triggerBody().Archivepath"
+		},
 		"Eventrigger_properties_typeProperties_scope": {
 			"type": "string",
 			"defaultValue": "/subscriptions/9fa57d3b-318f-48b1-a867-f733ebadeb9b/resourceGroups/AzureDemoRG/providers/Microsoft.Storage/storageAccounts/adfdemosc"
@@ -2125,7 +2129,7 @@
 							"name": "DerivedColumn1"
 						}
 					],
-					"script": "source(output(\n\t\tID as integer,\n\t\tName as string,\n\t\tModel as string,\n\t\tLength as integer\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tmoveFiles: ['/Event/','Src_Backup']) ~> source1\nsource1 derive(len = right(toString(Length),2),\n\t\tID = coalesce(ID,0)) ~> DerivedColumn1\nDerivedColumn1 sink(input(\n\t\tID as integer,\n\t\tName as string,\n\t\tModel as string,\n\t\tLength as integer\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tpreSQLs:['set identity_insert Cars on'],\n\tpostSQLs:['set identity_insert Cars off'],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> sink1"
+					"script": "parameters{\n\tArchivePath as string (\"adfdemoc/Src_Backup\")\n}\nsource(output(\n\t\tID as integer,\n\t\tName as string,\n\t\tModel as string,\n\t\tLength as integer\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tmoveFiles: ['/Event/','Src_Backup']) ~> source1\nsource1 derive(len = right(toString(Length),2),\n\t\tID = coalesce(ID,0)) ~> DerivedColumn1\nDerivedColumn1 sink(input(\n\t\tID as integer,\n\t\tName as string,\n\t\tModel as string,\n\t\tLength as integer\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tpreSQLs:['set identity_insert Cars on'],\n\tpostSQLs:['set identity_insert Cars off'],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> sink1"
 				}
 			},
 			"dependsOn": [
@@ -2175,6 +2179,9 @@
 						"type": "string"
 					},
 					"Filename": {
+						"type": "string"
+					},
+					"Archivepath": {
 						"type": "string"
 					}
 				},
@@ -2229,7 +2236,8 @@
 						},
 						"parameters": {
 							"Folderpath": "[parameters('Eventrigger_properties_Event_based_trigger_Pipeline_parameters_Folderpath')]",
-							"Filename": "[parameters('Eventrigger_properties_Event_based_trigger_Pipeline_parameters_Filename')]"
+							"Filename": "[parameters('Eventrigger_properties_Event_based_trigger_Pipeline_parameters_Filename')]",
+							"Archivepath": "[parameters('Eventrigger_properties_Event_based_trigger_Pipeline_parameters_Archivepath')]"
 						}
 					}
 				],
