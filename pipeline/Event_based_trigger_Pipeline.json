@@ -3,8 +3,8 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Copy data1",
-				"type": "Copy",
+				"name": "Event_Triggr_Dataflow",
+				"type": "ExecuteDataFlow",
 				"dependsOn": [],
 				"policy": {
 					"timeout": "7.00:00:00",
@@ -15,69 +15,16 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"source": {
-						"type": "DelimitedTextSource",
-						"storeSettings": {
-							"type": "AzureBlobStorageReadSettings",
-							"recursive": false,
-							"wildcardFolderPath": "Event",
-							"wildcardFileName": "*csv"
-						},
-						"formatSettings": {
-							"type": "DelimitedTextReadSettings"
-						}
+					"dataflow": {
+						"referenceName": "Event_Triggr_Dataflow",
+						"type": "DataFlowReference"
 					},
-					"sink": {
-						"type": "AzureSqlSink"
+					"compute": {
+						"coreCount": 8,
+						"computeType": "General"
 					},
-					"enableStaging": false,
-					"translator": {
-						"type": "TabularTranslator",
-						"mappings": [
-							{
-								"source": {
-									"name": "Department",
-									"type": "String",
-									"physicalType": "String"
-								},
-								"sink": {
-									"name": "Department",
-									"type": "String",
-									"physicalType": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "DepartmentName",
-									"type": "String",
-									"physicalType": "String"
-								},
-								"sink": {
-									"name": "DepartmentName",
-									"type": "String",
-									"physicalType": "String"
-								}
-							}
-						],
-						"typeConversion": true,
-						"typeConversionSettings": {
-							"allowDataTruncation": true,
-							"treatBooleanAsNumber": false
-						}
-					}
-				},
-				"inputs": [
-					{
-						"referenceName": "EventTriggrInput",
-						"type": "DatasetReference"
-					}
-				],
-				"outputs": [
-					{
-						"referenceName": "Event_Triggr_SQLdataset",
-						"type": "DatasetReference"
-					}
-				]
+					"traceLevel": "Fine"
+				}
 			}
 		],
 		"parameters": {
