@@ -28,10 +28,10 @@
 			}
 		],
 		"parameters": {
-			"Folderpath": {
+			"Folderpath1": {
 				"type": "string"
 			},
-			"Filename": {
+			"Filename1": {
 				"type": "string"
 			},
 			"Archivepath": {
