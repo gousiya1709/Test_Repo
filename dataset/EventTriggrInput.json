@@ -19,7 +19,7 @@
 					"value": "@dataset().DSFilename",
 					"type": "Expression"
 				},
-				"container": "adfdemoc"
+				"container": "eventtrigger"
 			},
 			"columnDelimiter": ",",
 			"escapeChar": "\\",
