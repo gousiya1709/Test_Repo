@@ -5,12 +5,27 @@
 			"referenceName": "AzureBlobStorage1",
 			"type": "LinkedServiceReference"
 		},
+		"parameters": {
+			"DSFolderpath": {
+				"type": "string"
+			},
+			"DSFilename": {
+				"type": "string"
+			}
+		},
 		"annotations": [],
 		"type": "DelimitedText",
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"folderPath": "Event",
+				"fileName": {
+					"value": "@dataset().DSFilename",
+					"type": "Expression"
+				},
+				"folderPath": {
+					"value": "@dataset().DSFolderpath",
+					"type": "Expression"
+				},
 				"container": "adfdemoc"
 			},
 			"columnDelimiter": ",",
