@@ -13,7 +13,8 @@
 				},
 				"parameters": {
 					"PLFilename": "@triggerbody().fileName",
-					"Archivepath": "Src_Backup"
+					"Archivepath": "Src_Backup",
+					"FolderPath": "@triggerbody().folderPath"
 				}
 			}
 		],

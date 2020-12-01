@@ -47,6 +47,9 @@
 			},
 			"Archivepath": {
 				"type": "string"
+			},
+			"FolderPath": {
+				"type": "string"
 			}
 		},
 		"annotations": []
