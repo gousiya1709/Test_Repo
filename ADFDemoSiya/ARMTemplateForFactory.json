@@ -27,17 +27,13 @@
 			"type": "string",
 			"defaultValue": "https://SiyaKeyVault.vault.azure.net/"
 		},
-		"Eventrigger_properties_Event_based_trigger_Pipeline_parameters_PLFolderpath": {
-			"type": "string",
-			"defaultValue": "@triggerBody().folderPath"
-		},
 		"Eventrigger_properties_Event_based_trigger_Pipeline_parameters_PLFilename": {
 			"type": "string",
-			"defaultValue": "@triggerBody().fileName"
+			"defaultValue": "@triggerbody().fileName"
 		},
 		"Eventrigger_properties_Event_based_trigger_Pipeline_parameters_Archivepath": {
 			"type": "string",
-			"defaultValue": "adfdemoc/Src_Backup"
+			"defaultValue": "Src_Backup"
 		},
 		"Eventrigger_properties_typeProperties_scope": {
 			"type": "string",
@@ -301,10 +297,6 @@
 								"referenceName": "Event_Triggr_Dataflow",
 								"type": "DataFlowReference",
 								"parameters": {
-									"DFolderpath": {
-										"value": "'@{pipeline().parameters.PLFolderpath}'",
-										"type": "Expression"
-									},
 									"DFilename": {
 										"value": "'@{pipeline().parameters.PLFilename}'",
 										"type": "Expression"
@@ -312,10 +304,6 @@
 								},
 								"datasetParameters": {
 									"source1": {
-										"DSFolderpath": {
-											"value": "@pipeline().parameters.PLFolderpath",
-											"type": "Expression"
-										},
 										"DSFilename": {
 											"value": "@pipeline().parameters.PLFilename",
 											"type": "Expression"
@@ -334,9 +322,6 @@
 					}
 				],
 				"parameters": {
-					"PLFolderpath": {
-						"type": "string"
-					},
 					"PLFilename": {
 						"type": "string"
 					},
@@ -3423,9 +3408,6 @@
 					"type": "LinkedServiceReference"
 				},
 				"parameters": {
-					"DSFolderpath": {
-						"type": "string"
-					},
 					"DSFilename": {
 						"type": "string"
 					}
@@ -3439,11 +3421,7 @@
 							"value": "@dataset().DSFilename",
 							"type": "Expression"
 						},
-						"folderPath": {
-							"value": "@dataset().DSFolderpath",
-							"type": "Expression"
-						},
-						"container": "adfdemoc"
+						"container": "eventtrigger"
 					},
 					"columnDelimiter": ",",
 					"escapeChar": "\\",
@@ -3814,7 +3792,7 @@
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"annotations": [
-					"SCDTYPE1"
+					"Eventtrigger"
 				],
 				"runtimeState": "Started",
 				"pipelines": [
@@ -3824,7 +3802,6 @@
 							"type": "PipelineReference"
 						},
 						"parameters": {
-							"PLFolderpath": "[parameters('Eventrigger_properties_Event_based_trigger_Pipeline_parameters_PLFolderpath')]",
 							"PLFilename": "[parameters('Eventrigger_properties_Event_based_trigger_Pipeline_parameters_PLFilename')]",
 							"Archivepath": "[parameters('Eventrigger_properties_Event_based_trigger_Pipeline_parameters_Archivepath')]"
 						}
@@ -3832,7 +3809,7 @@
 				],
 				"type": "BlobEventsTrigger",
 				"typeProperties": {
-					"blobPathBeginsWith": "/adfdemoc/blobs/Event/",
+					"blobPathBeginsWith": "/eventtrigger/blobs/",
 					"blobPathEndsWith": ".csv",
 					"ignoreEmptyBlobs": true,
 					"scope": "[parameters('Eventrigger_properties_typeProperties_scope')]",
@@ -3925,7 +3902,7 @@
 							"name": "DerivedColumn1"
 						}
 					],
-					"script": "parameters{\n\tDFolderpath as string,\n\tDFilename as string\n}\nsource(output(\n\t\tID as string,\n\t\tName as string,\n\t\tModel as string,\n\t\tLength as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tmoveFiles: [(concat($DFolderpath,'/',$DFilename)),'Src_Backup']) ~> source1\nsource1 derive(Length = right(toString(Length),2)) ~> DerivedColumn1\nDerivedColumn1 sink(input(\n\t\tID as integer,\n\t\tName as string,\n\t\tModel as string,\n\t\tLength as integer\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tpreSQLs:['set identity_insert Cars on'],\n\tpostSQLs:['set identity_insert Cars off'],\n\tmapColumn(\n\t\tID,\n\t\tName,\n\t\tModel,\n\t\tLength\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> sink1"
+					"script": "parameters{\n\tDFilename as string\n}\nsource(output(\n\t\tID as string,\n\t\tName as string,\n\t\tModel as string,\n\t\tLength as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tmoveFiles: [($DFilename),'Src_Backup']) ~> source1\nsource1 derive(Length = right(toString(Length),2)) ~> DerivedColumn1\nDerivedColumn1 sink(input(\n\t\tID as integer,\n\t\tName as string,\n\t\tModel as string,\n\t\tLength as integer\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tpreSQLs:['set identity_insert Cars on'],\n\tpostSQLs:['set identity_insert Cars off'],\n\tmapColumn(\n\t\tID,\n\t\tName,\n\t\tModel,\n\t\tLength\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> sink1"
 				}
 			},
 			"dependsOn": [

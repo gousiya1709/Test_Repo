@@ -27,17 +27,13 @@
 			"type": "string",
 			"defaultValue": "https://SiyaKeyVault.vault.azure.net/"
 		},
-		"Eventrigger_properties_Event_based_trigger_Pipeline_parameters_PLFolderpath": {
-			"type": "string",
-			"defaultValue": "@triggerBody().folderPath"
-		},
 		"Eventrigger_properties_Event_based_trigger_Pipeline_parameters_PLFilename": {
 			"type": "string",
-			"defaultValue": "@triggerBody().fileName"
+			"defaultValue": "@triggerbody().fileName"
 		},
 		"Eventrigger_properties_Event_based_trigger_Pipeline_parameters_Archivepath": {
 			"type": "string",
-			"defaultValue": "adfdemoc/Src_Backup"
+			"defaultValue": "Src_Backup"
 		},
 		"Eventrigger_properties_typeProperties_scope": {
 			"type": "string",
@@ -116,9 +112,6 @@
 					},
 					"AzureBlobStorage2_properties_typeProperties_connectionString_secretName": {
 						"value": "[parameters('AzureBlobStorage2_properties_typeProperties_connectionString_secretName')]"
-					},
-					"Eventrigger_properties_Event_based_trigger_Pipeline_parameters_PLFolderpath": {
-						"value": "[parameters('Eventrigger_properties_Event_based_trigger_Pipeline_parameters_PLFolderpath')]"
 					},
 					"Eventrigger_properties_Event_based_trigger_Pipeline_parameters_PLFilename": {
 						"value": "[parameters('Eventrigger_properties_Event_based_trigger_Pipeline_parameters_PLFilename')]"
