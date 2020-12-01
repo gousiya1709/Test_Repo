@@ -1,0 +1,347 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "ADFDemoSiya"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/Event_based_trigger_Pipeline')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Event_Triggr_Dataflow",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "Event_Triggr_Dataflow",
+								"type": "DataFlowReference",
+								"parameters": {
+									"Folderpath": {
+										"value": "'@{pipeline().parameters.Folderpath1}'",
+										"type": "Expression"
+									},
+									"Filename": {
+										"value": "'@{pipeline().parameters.Filename1}'",
+										"type": "Expression"
+									}
+								}
+							},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"parameters": {
+					"Folderpath1": {
+						"type": "string"
+					},
+					"Filename1": {
+						"type": "string"
+					},
+					"Archivepath": {
+						"type": "string"
+					}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/Event_Triggr_Dataflow')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pipeline_Execute')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Masterpipeline",
+						"type": "ExecutePipeline",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "pipeline_Delete",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true
+						}
+					},
+					{
+						"name": "Web1",
+						"type": "WebActivity",
+						"dependsOn": [
+							{
+								"activity": "Masterpipeline",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"url": "https://prod-54.eastus.logic.azure.com:443/workflows/be65faf437d44de49a61260d79923416/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=g-Ax8281_OLfdJpiEwUsbhzYCyuW1q16kt2B3uqxrok",
+							"method": "POST",
+							"headers": {
+								"ContentType": "applicationJson"
+							},
+							"body": {
+								"value": "{\n\"Email To\" : \"mgousiya@pkglobal.com\",\n\"Subject\" : \"Pipeline_Execute  Successful\",\n\"DataFactoryName\" : \"@{pipeline().DataFactory}\",\n\"PipelineName\" : \"@{pipeline().Pipeline}\",\n\"pipelinerunid\" : \"@{pipeline().RunId}\",\n\"ErrorMessage\" : \" files are deleted within start and end time specified in pipeline_Delete\"\n}",
+								"type": "Expression"
+							}
+						}
+					}
+				],
+				"annotations": [],
+				"lastPublishTime": "2020-11-11T18:32:46Z"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureSqlTable3')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureSqlDatabaseLinkedservice",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "OETireSize",
+						"type": "varchar"
+					},
+					{
+						"name": "LoadRange",
+						"type": "varchar"
+					},
+					{
+						"name": "Updated_Date",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "Inserted_Date",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "OE_Forecast_Loadrange"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DatasetSrc')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureBlobStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"folderPath": "SCD1",
+						"container": "adfdemoc"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/EventTriggrInput')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureBlobStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"folderPath": "Event",
+						"container": "adfdemoc"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "ID",
+						"type": "String"
+					},
+					{
+						"name": "Name",
+						"type": "String"
+					},
+					{
+						"name": "Model",
+						"type": "String"
+					},
+					{
+						"name": "Length",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Excel1')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureBlobStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Excel",
+				"typeProperties": {
+					"sheetName": "Loadrange_details",
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "Loadrange_1.xlsx",
+						"folderPath": "SCD1",
+						"container": "adfdemoc"
+					},
+					"firstRowAsHeader": true
+				},
+				"schema": [
+					{
+						"name": "OETireSize ",
+						"type": "String"
+					},
+					{
+						"name": "LoadRange",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Eventrigger')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [
+					"SCDTYPE1"
+				],
+				"runtimeState": "Started",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "Event_based_trigger_Pipeline",
+							"type": "PipelineReference"
+						},
+						"parameters": {
+							"Folderpath1": "@triggerBody().folderPath",
+							"Filename1": "@triggerBody().fileName",
+							"Archivepath": "\"adfdemoc/Src_Backup\""
+						}
+					}
+				],
+				"type": "BlobEventsTrigger",
+				"typeProperties": {
+					"blobPathBeginsWith": "/adfdemoc/blobs/Event/",
+					"blobPathEndsWith": ".csv",
+					"ignoreEmptyBlobs": true,
+					"scope": "/subscriptions/9fa57d3b-318f-48b1-a867-f733ebadeb9b/resourceGroups/AzureDemoRG/providers/Microsoft.Storage/storageAccounts/adfdemosc",
+					"events": [
+						"Microsoft.Storage.BlobCreated"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/Event_based_trigger_Pipeline')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Event_Triggr_Dataflow')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "EventTriggrInput",
+								"type": "DatasetReference"
+							},
+							"name": "source1"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "Event_Triggr_SQLdataset",
+								"type": "DatasetReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [
+						{
+							"name": "DerivedColumn1"
+						}
+					],
+					"script": "parameters{\n\tFolderpath as string,\n\tFilename as string\n}\nsource(output(\n\t\tID as string,\n\t\tName as string,\n\t\tModel as string,\n\t\tLength as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tmoveFiles: [(concat($Folderpath,'/',$Filename)),'Src_Backup']) ~> source1\nsource1 derive(Length = right(toString(Length),2)) ~> DerivedColumn1\nDerivedColumn1 sink(input(\n\t\tID as integer,\n\t\tName as string,\n\t\tModel as string,\n\t\tLength as integer\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tpreSQLs:['set identity_insert Cars on'],\n\tpostSQLs:['set identity_insert Cars off'],\n\tmapColumn(\n\t\tID,\n\t\tName,\n\t\tModel,\n\t\tLength\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> sink1"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/EventTriggrInput')]"
+			]
+		}
+	]
+}

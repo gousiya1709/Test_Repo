@@ -27,11 +27,11 @@
 			"type": "string",
 			"defaultValue": "https://SiyaKeyVault.vault.azure.net/"
 		},
-		"Eventrigger_properties_Event_based_trigger_Pipeline_parameters_Folderpath": {
+		"Eventrigger_properties_Event_based_trigger_Pipeline_parameters_Folderpath1": {
 			"type": "string",
 			"defaultValue": "@triggerBody().folderPath"
 		},
-		"Eventrigger_properties_Event_based_trigger_Pipeline_parameters_Filename": {
+		"Eventrigger_properties_Event_based_trigger_Pipeline_parameters_Filename1": {
 			"type": "string",
 			"defaultValue": "@triggerBody().fileName"
 		},
@@ -117,11 +117,11 @@
 					"AzureBlobStorage2_properties_typeProperties_connectionString_secretName": {
 						"value": "[parameters('AzureBlobStorage2_properties_typeProperties_connectionString_secretName')]"
 					},
-					"Eventrigger_properties_Event_based_trigger_Pipeline_parameters_Folderpath": {
-						"value": "[parameters('Eventrigger_properties_Event_based_trigger_Pipeline_parameters_Folderpath')]"
+					"Eventrigger_properties_Event_based_trigger_Pipeline_parameters_Folderpath1": {
+						"value": "[parameters('Eventrigger_properties_Event_based_trigger_Pipeline_parameters_Folderpath1')]"
 					},
-					"Eventrigger_properties_Event_based_trigger_Pipeline_parameters_Filename": {
-						"value": "[parameters('Eventrigger_properties_Event_based_trigger_Pipeline_parameters_Filename')]"
+					"Eventrigger_properties_Event_based_trigger_Pipeline_parameters_Filename1": {
+						"value": "[parameters('Eventrigger_properties_Event_based_trigger_Pipeline_parameters_Filename1')]"
 					},
 					"Eventrigger_properties_Event_based_trigger_Pipeline_parameters_Archivepath": {
 						"value": "[parameters('Eventrigger_properties_Event_based_trigger_Pipeline_parameters_Archivepath')]"

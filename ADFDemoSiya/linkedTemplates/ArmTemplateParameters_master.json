@@ -20,10 +20,10 @@
 		"AzureKeyVault1_properties_typeProperties_baseUrl": {
 			"value": "https://SiyaKeyVault.vault.azure.net/"
 		},
-		"Eventrigger_properties_Event_based_trigger_Pipeline_parameters_Folderpath": {
+		"Eventrigger_properties_Event_based_trigger_Pipeline_parameters_Folderpath1": {
 			"value": "@triggerBody().folderPath"
 		},
-		"Eventrigger_properties_Event_based_trigger_Pipeline_parameters_Filename": {
+		"Eventrigger_properties_Event_based_trigger_Pipeline_parameters_Filename1": {
 			"value": "@triggerBody().fileName"
 		},
 		"Eventrigger_properties_Event_based_trigger_Pipeline_parameters_Archivepath": {

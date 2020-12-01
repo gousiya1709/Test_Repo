@@ -407,8 +407,16 @@
 						"type": "varchar"
 					},
 					{
-						"name": "Date_Updated",
-						"type": "varchar"
+						"name": "Updated_Date",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "Inserted_Date",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
 					}
 				],
 				"typeProperties": {
@@ -1252,7 +1260,7 @@
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobStorageLocation",
-						"folderPath": "input",
+						"folderPath": "SCD1",
 						"container": "adfdemoc"
 					},
 					"columnDelimiter": ",",

@@ -11,11 +11,11 @@
 			"type": "string",
 			"defaultValue": "ConnectionStringSecret"
 		},
-		"Eventrigger_properties_Event_based_trigger_Pipeline_parameters_Folderpath": {
+		"Eventrigger_properties_Event_based_trigger_Pipeline_parameters_Folderpath1": {
 			"type": "string",
 			"defaultValue": "@triggerBody().folderPath"
 		},
-		"Eventrigger_properties_Event_based_trigger_Pipeline_parameters_Filename": {
+		"Eventrigger_properties_Event_based_trigger_Pipeline_parameters_Filename1": {
 			"type": "string",
 			"defaultValue": "@triggerBody().fileName"
 		},
@@ -46,7 +46,7 @@
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobStorageLocation",
-						"folderPath": "Event/",
+						"folderPath": "Event",
 						"container": "adfdemoc"
 					},
 					"columnDelimiter": ",",
@@ -54,7 +54,24 @@
 					"firstRowAsHeader": true,
 					"quoteChar": "\""
 				},
-				"schema": []
+				"schema": [
+					{
+						"name": "ID",
+						"type": "String"
+					},
+					{
+						"name": "Name",
+						"type": "String"
+					},
+					{
+						"name": "Model",
+						"type": "String"
+					},
+					{
+						"name": "Length",
+						"type": "String"
+					}
+				]
 			},
 			"dependsOn": []
 		},
@@ -108,16 +125,25 @@
 				"annotations": [],
 				"type": "Excel",
 				"typeProperties": {
-					"sheetName": "CORE DATA",
+					"sheetName": "Loadrange_details",
 					"location": {
 						"type": "AzureBlobStorageLocation",
-						"fileName": "TIRE_FORECAST_US_CAN_1020_w_HIST_updated_111720.xlsx",
-						"folderPath": "input",
+						"fileName": "Loadrange_1.xlsx",
+						"folderPath": "SCD1",
 						"container": "adfdemoc"
 					},
 					"firstRowAsHeader": true
 				},
-				"schema": []
+				"schema": [
+					{
+						"name": "OETireSize ",
+						"type": "String"
+					},
+					{
+						"name": "LoadRange",
+						"type": "String"
+					}
+				]
 			},
 			"dependsOn": []
 		},
@@ -2127,7 +2153,7 @@
 							"name": "DerivedColumn1"
 						}
 					],
-					"script": "source(output(\n\t\tID as integer,\n\t\tName as string,\n\t\tModel as string,\n\t\tLength as integer\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tmoveFiles: ['/Event/','Src_Backup']) ~> source1\nsource1 derive(len = right(toString(Length),2),\n\t\tID = coalesce(ID,0)) ~> DerivedColumn1\nDerivedColumn1 sink(input(\n\t\tID as integer,\n\t\tName as string,\n\t\tModel as string,\n\t\tLength as integer\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tpreSQLs:['set identity_insert Cars on'],\n\tpostSQLs:['set identity_insert Cars off'],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> sink1"
+					"script": "parameters{\n\tFolderpath as string,\n\tFilename as string\n}\nsource(output(\n\t\tID as string,\n\t\tName as string,\n\t\tModel as string,\n\t\tLength as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tmoveFiles: [(concat($Folderpath,'/',$Filename)),'Src_Backup']) ~> source1\nsource1 derive(Length = right(toString(Length),2)) ~> DerivedColumn1\nDerivedColumn1 sink(input(\n\t\tID as integer,\n\t\tName as string,\n\t\tModel as string,\n\t\tLength as integer\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tpreSQLs:['set identity_insert Cars on'],\n\tpostSQLs:['set identity_insert Cars off'],\n\tmapColumn(\n\t\tID,\n\t\tName,\n\t\tModel,\n\t\tLength\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> sink1"
 				}
 			},
 			"dependsOn": [
@@ -2157,7 +2183,16 @@
 							"dataflow": {
 								"referenceName": "Event_Triggr_Dataflow",
 								"type": "DataFlowReference",
-								"parameters": {},
+								"parameters": {
+									"Folderpath": {
+										"value": "'@{pipeline().parameters.Folderpath1}'",
+										"type": "Expression"
+									},
+									"Filename": {
+										"value": "'@{pipeline().parameters.Filename1}'",
+										"type": "Expression"
+									}
+								},
 								"datasetParameters": {
 									"source1": {},
 									"sink1": {}
@@ -2173,10 +2208,10 @@
 					}
 				],
 				"parameters": {
-					"Folderpath": {
+					"Folderpath1": {
 						"type": "string"
 					},
-					"Filename": {
+					"Filename1": {
 						"type": "string"
 					},
 					"Archivepath": {
@@ -2216,7 +2251,7 @@
 							{
 								"activity": "Masterpipeline",
 								"dependencyConditions": [
-									"Failed"
+									"Succeeded"
 								]
 							}
 						],
@@ -2235,7 +2270,7 @@
 								"ContentType": "applicationJson"
 							},
 							"body": {
-								"value": "{\n\"Email To\" : \"mgousiya@pkglobal.com\",\n\"Subject\" : \"Pipeline_Execute  failed\",\n\"DataFactoryName\" : \"@{pipeline().DataFactory}\",\n\"PipelineName\" : \"@{pipeline().Pipeline}\",\n\"pipelinerunid\" : \"@{pipeline().RunId}\",\n\"ErrorMessage\" : \"There are no files to be deleted within start and end time specified in pipeline_Delete\"\n}",
+								"value": "{\n\"Email To\" : \"mgousiya@pkglobal.com\",\n\"Subject\" : \"Pipeline_Execute  Successful\",\n\"DataFactoryName\" : \"@{pipeline().DataFactory}\",\n\"PipelineName\" : \"@{pipeline().Pipeline}\",\n\"pipelinerunid\" : \"@{pipeline().RunId}\",\n\"ErrorMessage\" : \" files are deleted within start and end time specified in pipeline_Delete\"\n}",
 								"type": "Expression"
 							}
 						}
@@ -2264,8 +2299,8 @@
 							"type": "PipelineReference"
 						},
 						"parameters": {
-							"Folderpath": "[parameters('Eventrigger_properties_Event_based_trigger_Pipeline_parameters_Folderpath')]",
-							"Filename": "[parameters('Eventrigger_properties_Event_based_trigger_Pipeline_parameters_Filename')]",
+							"Folderpath1": "[parameters('Eventrigger_properties_Event_based_trigger_Pipeline_parameters_Folderpath1')]",
+							"Filename1": "[parameters('Eventrigger_properties_Event_based_trigger_Pipeline_parameters_Filename1')]",
 							"Archivepath": "[parameters('Eventrigger_properties_Event_based_trigger_Pipeline_parameters_Archivepath')]"
 						}
 					}
