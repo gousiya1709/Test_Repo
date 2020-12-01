@@ -13,7 +13,8 @@
 				},
 				"parameters": {
 					"Folderpath": "@triggerBody().folderPath",
-					"Filename": "@triggerBody().fileName"
+					"Filename": "@triggerBody().fileName",
+					"Archivepath": "@triggerBody().Archivepath"
 				}
 			}
 		],
