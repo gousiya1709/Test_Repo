@@ -12,8 +12,8 @@
 					"type": "PipelineReference"
 				},
 				"parameters": {
-					"Folderpath": "@triggerBody().folderPath",
-					"Filename": "@triggerBody().fileName",
+					"Folderpath1": "@triggerBody().folderPath",
+					"Filename1": "@triggerBody().fileName",
 					"Archivepath": "\"adfdemoc/Src_Backup\""
 				}
 			}
