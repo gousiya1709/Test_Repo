@@ -20,7 +20,7 @@
 						"storeSettings": {
 							"type": "AzureBlobStorageReadSettings",
 							"recursive": false,
-							"wildcardFolderPath": "Event_based_trigger_ip",
+							"wildcardFolderPath": "Event",
 							"wildcardFileName": "*csv"
 						},
 						"formatSettings": {
@@ -28,15 +28,7 @@
 						}
 					},
 					"sink": {
-						"type": "DelimitedTextSink",
-						"storeSettings": {
-							"type": "AzureBlobStorageWriteSettings"
-						},
-						"formatSettings": {
-							"type": "DelimitedTextWriteSettings",
-							"quoteAllText": true,
-							"fileExtension": ""
-						}
+						"type": "AzureSqlSink"
 					},
 					"enableStaging": false,
 					"translator": {
@@ -82,7 +74,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "EventTriggrOutput",
+						"referenceName": "Event_Triggr_SQLdataset",
 						"type": "DatasetReference"
 					}
 				]
