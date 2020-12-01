@@ -38,10 +38,10 @@
 			}
 		],
 		"parameters": {
-			"Folderpath1": {
+			"PLFolderpath": {
 				"type": "string"
 			},
-			"Filename1": {
+			"PLFilename": {
 				"type": "string"
 			},
 			"Archivepath": {

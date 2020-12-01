@@ -12,9 +12,9 @@
 					"type": "PipelineReference"
 				},
 				"parameters": {
-					"Folderpath1": "@triggerBody().folderPath",
-					"Filename1": "@triggerBody().fileName",
-					"Archivepath": "\"adfdemoc/Src_Backup\""
+					"PLFolderpath": "@triggerBody().folderPath",
+					"PLFilename": "@triggerBody().fileName",
+					"Archivepath": "adfdemoc/Src_Backup"
 				}
 			}
 		],
