@@ -8,15 +8,24 @@
 		"annotations": [],
 		"type": "Excel",
 		"typeProperties": {
-			"sheetName": "CORE DATA",
+			"sheetName": "Loadrange_details",
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"fileName": "TIRE_FORECAST_US_CAN_1020_w_HIST_updated_111720.xlsx",
-				"folderPath": "input",
+				"fileName": "Loadrange_1.xlsx",
+				"folderPath": "SCD1",
 				"container": "adfdemoc"
 			},
 			"firstRowAsHeader": true
 		},
-		"schema": []
+		"schema": [
+			{
+				"name": "OETireSize ",
+				"type": "String"
+			},
+			{
+				"name": "LoadRange",
+				"type": "String"
+			}
+		]
 	}
 }
