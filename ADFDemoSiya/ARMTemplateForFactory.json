@@ -3728,6 +3728,7 @@
 				"type": "BlobEventsTrigger",
 				"typeProperties": {
 					"blobPathBeginsWith": "/adfdemoc/blobs/Event/",
+					"blobPathEndsWith": ".csv",
 					"ignoreEmptyBlobs": true,
 					"scope": "[parameters('Eventrigger_properties_typeProperties_scope')]",
 					"events": [
