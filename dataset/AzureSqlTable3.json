@@ -10,8 +10,7 @@
 		"schema": [
 			{
 				"name": "OETireSize",
-				"type": "int",
-				"precision": 10
+				"type": "varchar"
 			},
 			{
 				"name": "LoadRange",
