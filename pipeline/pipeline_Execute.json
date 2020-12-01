@@ -22,7 +22,7 @@
 					{
 						"activity": "Masterpipeline",
 						"dependencyConditions": [
-							"Failed"
+							"Succeeded"
 						]
 					}
 				],
@@ -41,7 +41,7 @@
 						"ContentType": "applicationJson"
 					},
 					"body": {
-						"value": "{\n\"Email To\" : \"mgousiya@pkglobal.com\",\n\"Subject\" : \"Pipeline_Execute  failed\",\n\"DataFactoryName\" : \"@{pipeline().DataFactory}\",\n\"PipelineName\" : \"@{pipeline().Pipeline}\",\n\"pipelinerunid\" : \"@{pipeline().RunId}\",\n\"ErrorMessage\" : \"There are no files to be deleted within start and end time specified in pipeline_Delete\"\n}",
+						"value": "{\n\"Email To\" : \"mgousiya@pkglobal.com\",\n\"Subject\" : \"Pipeline_Execute  Successful\",\n\"DataFactoryName\" : \"@{pipeline().DataFactory}\",\n\"PipelineName\" : \"@{pipeline().Pipeline}\",\n\"pipelinerunid\" : \"@{pipeline().RunId}\",\n\"ErrorMessage\" : \" files are deleted within start and end time specified in pipeline_Delete\"\n}",
 						"type": "Expression"
 					}
 				}
