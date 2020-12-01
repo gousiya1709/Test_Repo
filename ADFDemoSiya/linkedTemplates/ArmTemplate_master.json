@@ -29,11 +29,11 @@
 		},
 		"Eventrigger_properties_Event_based_trigger_Pipeline_parameters_Folderpath": {
 			"type": "string",
-			"defaultValue": "@triggerBody().folderpath"
+			"defaultValue": "@triggerBody().folderPath"
 		},
 		"Eventrigger_properties_Event_based_trigger_Pipeline_parameters_Filename": {
 			"type": "string",
-			"defaultValue": "@triggerBody().filename"
+			"defaultValue": "@triggerBody().fileName"
 		},
 		"Eventrigger_properties_typeProperties_scope": {
 			"type": "string",
@@ -88,6 +88,9 @@
 					},
 					"trigger1_properties_typeProperties_scope": {
 						"value": "[parameters('trigger1_properties_typeProperties_scope')]"
+					},
+					"trigger2_properties_typeProperties_scope": {
+						"value": "[parameters('trigger2_properties_typeProperties_scope')]"
 					}
 				}
 			},
@@ -118,9 +121,6 @@
 					},
 					"Eventrigger_properties_typeProperties_scope": {
 						"value": "[parameters('Eventrigger_properties_typeProperties_scope')]"
-					},
-					"trigger2_properties_typeProperties_scope": {
-						"value": "[parameters('trigger2_properties_typeProperties_scope')]"
 					}
 				}
 			},

@@ -13,17 +13,13 @@
 		},
 		"Eventrigger_properties_Event_based_trigger_Pipeline_parameters_Folderpath": {
 			"type": "string",
-			"defaultValue": "@triggerBody().folderpath"
+			"defaultValue": "@triggerBody().folderPath"
 		},
 		"Eventrigger_properties_Event_based_trigger_Pipeline_parameters_Filename": {
 			"type": "string",
-			"defaultValue": "@triggerBody().filename"
+			"defaultValue": "@triggerBody().fileName"
 		},
 		"Eventrigger_properties_typeProperties_scope": {
-			"type": "string",
-			"defaultValue": "/subscriptions/9fa57d3b-318f-48b1-a867-f733ebadeb9b/resourceGroups/AzureDemoRG/providers/Microsoft.Storage/storageAccounts/adfdemosc"
-		},
-		"trigger2_properties_typeProperties_scope": {
 			"type": "string",
 			"defaultValue": "/subscriptions/9fa57d3b-318f-48b1-a867-f733ebadeb9b/resourceGroups/AzureDemoRG/providers/Microsoft.Storage/storageAccounts/adfdemosc"
 		}
@@ -33,7 +29,7 @@
 	},
 	"resources": [
 		{
-			"name": "[concat(parameters('factoryName'), '/EventTriggrOutput')]",
+			"name": "[concat(parameters('factoryName'), '/EventTriggrInput')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -46,7 +42,7 @@
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobStorageLocation",
-						"folderPath": "Event_based_trigger_op",
+						"folderPath": "Event/",
 						"container": "adfdemoc"
 					},
 					"columnDelimiter": ",",
@@ -54,16 +50,45 @@
 					"firstRowAsHeader": true,
 					"quoteChar": "\""
 				},
+				"schema": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Event_Triggr_SQLdataset')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureSqlDatabaseLinkedservice",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
 				"schema": [
 					{
-						"name": "Department",
-						"type": "String"
+						"name": "ID",
+						"type": "int",
+						"precision": 10
 					},
 					{
-						"name": "DepartmentName",
-						"type": "String"
+						"name": "Name",
+						"type": "varchar"
+					},
+					{
+						"name": "Model",
+						"type": "varchar"
+					},
+					{
+						"name": "Length",
+						"type": "int",
+						"precision": 10
 					}
-				]
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "Cars"
+				}
 			},
 			"dependsOn": []
 		},
@@ -207,70 +232,6 @@
 					"location": {
 						"type": "AzureBlobStorageLocation",
 						"folderPath": "Output",
-						"container": "adfdemoc"
-					},
-					"columnDelimiter": ",",
-					"escapeChar": "\\",
-					"firstRowAsHeader": true,
-					"quoteChar": "\""
-				},
-				"schema": []
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/SCD1SQLdataset')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "AzureSqlDatabaseLinkedservice",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "AzureSqlTable",
-				"schema": [
-					{
-						"name": "ID",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "Name",
-						"type": "varchar"
-					},
-					{
-						"name": "Model",
-						"type": "varchar"
-					},
-					{
-						"name": "Length",
-						"type": "int",
-						"precision": 10
-					}
-				],
-				"typeProperties": {
-					"schema": "dbo",
-					"table": "Cars"
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/SCD1dataset')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "AzureBlobStorage1",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "DelimitedText",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobStorageLocation",
-						"folderPath": "Event",
 						"container": "adfdemoc"
 					},
 					"columnDelimiter": ",",
@@ -568,114 +529,6 @@
 				"[concat(variables('factoryId'), '/datasets/Tablelist_Dataset')]",
 				"[concat(variables('factoryId'), '/datasets/SqlTable')]",
 				"[concat(variables('factoryId'), '/datasets/ExportedData_Bulkcopy_Dataset')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/Event_based_trigger_Pipeline')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "Copy data1",
-						"type": "Copy",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "DelimitedTextSource",
-								"storeSettings": {
-									"type": "AzureBlobStorageReadSettings",
-									"recursive": false,
-									"wildcardFolderPath": "Event_based_trigger_ip",
-									"wildcardFileName": "*csv"
-								},
-								"formatSettings": {
-									"type": "DelimitedTextReadSettings"
-								}
-							},
-							"sink": {
-								"type": "DelimitedTextSink",
-								"storeSettings": {
-									"type": "AzureBlobStorageWriteSettings"
-								},
-								"formatSettings": {
-									"type": "DelimitedTextWriteSettings",
-									"quoteAllText": true,
-									"fileExtension": ""
-								}
-							},
-							"enableStaging": false,
-							"translator": {
-								"type": "TabularTranslator",
-								"mappings": [
-									{
-										"source": {
-											"name": "Department",
-											"type": "String",
-											"physicalType": "String"
-										},
-										"sink": {
-											"name": "Department",
-											"type": "String",
-											"physicalType": "String"
-										}
-									},
-									{
-										"source": {
-											"name": "DepartmentName",
-											"type": "String",
-											"physicalType": "String"
-										},
-										"sink": {
-											"name": "DepartmentName",
-											"type": "String",
-											"physicalType": "String"
-										}
-									}
-								],
-								"typeConversion": true,
-								"typeConversionSettings": {
-									"allowDataTruncation": true,
-									"treatBooleanAsNumber": false
-								}
-							}
-						},
-						"inputs": [
-							{
-								"referenceName": "EventTriggrInput",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						],
-						"outputs": [
-							{
-								"referenceName": "EventTriggrOutput",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						]
-					}
-				],
-				"parameters": {
-					"Folderpath": {
-						"type": "string"
-					},
-					"Filename": {
-						"type": "string"
-					}
-				},
-				"annotations": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/EventTriggrOutput')]"
 			]
 		},
 		{
@@ -2190,80 +2043,6 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/SCDType1pipeline')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "Copy data1",
-						"type": "Copy",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "DelimitedTextSource",
-								"storeSettings": {
-									"type": "AzureBlobStorageReadSettings",
-									"recursive": true,
-									"wildcardFolderPath": "Event/",
-									"wildcardFileName": "*"
-								},
-								"formatSettings": {
-									"type": "DelimitedTextReadSettings"
-								}
-							},
-							"sink": {
-								"type": "DelimitedTextSink",
-								"storeSettings": {
-									"type": "AzureBlobStorageWriteSettings"
-								},
-								"formatSettings": {
-									"type": "DelimitedTextWriteSettings",
-									"quoteAllText": true,
-									"fileExtension": ".txt"
-								}
-							},
-							"enableStaging": false,
-							"translator": {
-								"type": "TabularTranslator",
-								"typeConversion": true,
-								"typeConversionSettings": {
-									"allowDataTruncation": true,
-									"treatBooleanAsNumber": false
-								}
-							}
-						},
-						"inputs": [
-							{
-								"referenceName": "EventTriggrInput",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						],
-						"outputs": [
-							{
-								"referenceName": "EventTriggrOutput",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						]
-					}
-				],
-				"annotations": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/EventTriggrOutput')]"
-			]
-		},
-		{
 			"name": "[concat(parameters('factoryName'), '/pipeline_Delete')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -2317,7 +2096,7 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/SCD1_DATAFLOW')]",
+			"name": "[concat(parameters('factoryName'), '/Event_Triggr_Dataflow')]",
 			"type": "Microsoft.DataFactory/factories/dataflows",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -2326,36 +2105,83 @@
 					"sources": [
 						{
 							"dataset": {
-								"referenceName": "SCD1dataset",
+								"referenceName": "EventTriggrInput",
 								"type": "DatasetReference"
 							},
-							"name": "SCD1Src"
+							"name": "source1"
 						}
 					],
 					"sinks": [
 						{
 							"dataset": {
-								"referenceName": "SCD1SQLdataset",
+								"referenceName": "Event_Triggr_SQLdataset",
 								"type": "DatasetReference"
 							},
-							"name": "sink1",
-							"rejectedDataLinkedService": {
-								"referenceName": "AzureBlobStorage1",
-								"type": "LinkedServiceReference"
-							}
+							"name": "sink1"
 						}
 					],
 					"transformations": [
 						{
-							"name": "AlterRow1"
+							"name": "DerivedColumn1"
 						}
 					],
-					"script": "source(output(\n\t\tID as integer,\n\t\tName as string,\n\t\tModel as string,\n\t\tLength as integer\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> SCD1Src\nSCD1Src alterRow(upsertIf(1==1)) ~> AlterRow1\nAlterRow1 sink(input(\n\t\tID as integer,\n\t\tName as string,\n\t\tModel as string,\n\t\tLength as integer\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:false,\n\tupdateable:false,\n\tupsertable:true,\n\tkeys:['ID'],\n\tformat: 'table',\n\tpreSQLs:['set identity_insert Cars on'],\n\tpostSQLs:['set identity_insert Cars off'],\n\tmapColumn(\n\t\tID,\n\t\tName,\n\t\tModel,\n\t\tLength\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError',\n\toutputRejectedData: true,\n\trejectedData_container: 'adfdemoc',\n\trejectedData_folderPath: 'EventtriggerOutput') ~> sink1"
+					"script": "source(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tmoveFiles: ['/Event/','Src_Backup']) ~> source1\nsource1 derive(Ins_TS = currentUTC()) ~> DerivedColumn1\nDerivedColumn1 sink(input(\n\t\tID as integer,\n\t\tName as string,\n\t\tModel as string,\n\t\tLength as integer\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> sink1"
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/SCD1dataset')]",
-				"[concat(variables('factoryId'), '/datasets/SCD1SQLdataset')]"
+				"[concat(variables('factoryId'), '/datasets/EventTriggrInput')]",
+				"[concat(variables('factoryId'), '/datasets/Event_Triggr_SQLdataset')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Event_based_trigger_Pipeline')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Event_Triggr_Dataflow",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "Event_Triggr_Dataflow",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"source1": {},
+									"sink1": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"parameters": {
+					"Folderpath": {
+						"type": "string"
+					},
+					"Filename": {
+						"type": "string"
+					}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/Event_Triggr_Dataflow')]"
 			]
 		},
 		{
@@ -2394,7 +2220,7 @@
 				"annotations": [
 					"SCDTYPE1"
 				],
-				"runtimeState": "Stopped",
+				"runtimeState": "Started",
 				"pipelines": [
 					{
 						"pipelineReference": {
@@ -2409,7 +2235,7 @@
 				],
 				"type": "BlobEventsTrigger",
 				"typeProperties": {
-					"blobPathBeginsWith": "/adfdemoc/blobs/EventtriggerInput/",
+					"blobPathBeginsWith": "/adfdemoc/blobs/Event/",
 					"ignoreEmptyBlobs": true,
 					"scope": "[parameters('Eventrigger_properties_typeProperties_scope')]",
 					"events": [
@@ -2419,36 +2245,6 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/pipelines/Event_based_trigger_Pipeline')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/trigger2')]",
-			"type": "Microsoft.DataFactory/factories/triggers",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"runtimeState": "Started",
-				"pipelines": [
-					{
-						"pipelineReference": {
-							"referenceName": "SCDType1pipeline",
-							"type": "PipelineReference"
-						},
-						"parameters": {}
-					}
-				],
-				"type": "BlobEventsTrigger",
-				"typeProperties": {
-					"blobPathBeginsWith": "/adfdemoc/blobs/Event/",
-					"ignoreEmptyBlobs": true,
-					"scope": "[parameters('trigger2_properties_typeProperties_scope')]",
-					"events": [
-						"Microsoft.Storage.BlobCreated"
-					]
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/pipelines/SCDType1pipeline')]"
 			]
 		}
 	]
