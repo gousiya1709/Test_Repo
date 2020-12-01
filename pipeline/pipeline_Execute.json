@@ -14,6 +14,37 @@
 					},
 					"waitOnCompletion": true
 				}
+			},
+			{
+				"name": "Web1",
+				"type": "WebActivity",
+				"dependsOn": [
+					{
+						"activity": "Masterpipeline",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"url": "https://prod-54.eastus.logic.azure.com:443/workflows/be65faf437d44de49a61260d79923416/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=g-Ax8281_OLfdJpiEwUsbhzYCyuW1q16kt2B3uqxrok",
+					"method": "POST",
+					"headers": {
+						"ContentType": "applicationJson"
+					},
+					"body": {
+						"value": "{\n\"Email To\" : \"mgousiya@pkglobal.com\",\n\"Subject\" : \"Pipeline_Execute  failed\",\n\"DataFactoryName\" : \"@{pipeline().DataFactory}\",\n\"PipelineName\" : \"@{pipeline().Pipeline}\",\n\"pipelinerunid\" : \"@{pipeline().RunId}\",\n\"ErrorMessage\" : \"There are no files to be deleted within start and end time specified in pipeline_Delete\"\n}",
+						"type": "Expression"
+					}
+				}
 			}
 		],
 		"annotations": [],
