@@ -10,7 +10,6 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"fileName": "Cars1.csv",
 				"folderPath": "Event",
 				"container": "adfdemoc"
 			},
@@ -19,6 +18,23 @@
 			"firstRowAsHeader": true,
 			"quoteChar": "\""
 		},
-		"schema": []
+		"schema": [
+			{
+				"name": "ID",
+				"type": "String"
+			},
+			{
+				"name": "Name",
+				"type": "String"
+			},
+			{
+				"name": "Model",
+				"type": "String"
+			},
+			{
+				"name": "Length",
+				"type": "String"
+			}
+		]
 	}
 }
