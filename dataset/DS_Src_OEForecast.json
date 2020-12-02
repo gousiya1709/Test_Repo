@@ -8,10 +8,9 @@
 		"annotations": [],
 		"type": "Excel",
 		"typeProperties": {
-			"sheetName": "Loadrange_details",
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"fileName": "Loadrange_1.xlsx",
+				"fileName": "Loadrange1.xlsx",
 				"folderPath": "SCD1",
 				"container": "adfdemoc"
 			},
