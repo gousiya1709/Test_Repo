@@ -22,6 +22,10 @@
 							"DFilename": {
 								"value": "'@{pipeline().parameters.PLFilename}'",
 								"type": "Expression"
+							},
+							"ArchiveFolder": {
+								"value": "'@{pipeline().parameters.Archivepath}'",
+								"type": "Expression"
 							}
 						},
 						"datasetParameters": {
