@@ -1,0 +1,58 @@
+{
+	"name": "SCDTYPE1DF",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DS_Src_OEForecast",
+						"type": "DatasetReference"
+					},
+					"name": "SrcOEForecastLoadRange"
+				},
+				{
+					"dataset": {
+						"referenceName": "DS_OEFORECASTLOADRANGE",
+						"type": "DatasetReference"
+					},
+					"name": "RefDimOEFORECASTLOADRANGE"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DS_OEFORECASTLOADRANGE",
+						"type": "DatasetReference"
+					},
+					"name": "SnkDimOEFORECASTLOADRANGEIns"
+				},
+				{
+					"dataset": {
+						"referenceName": "DS_OEFORECASTLOADRANGE",
+						"type": "DatasetReference"
+					},
+					"name": "SnkDimOEFORECASTLOADRANGEUpd"
+				}
+			],
+			"transformations": [
+				{
+					"name": "JoinOEtireSize"
+				},
+				{
+					"name": "ConditionalSplit1"
+				},
+				{
+					"name": "AlterRow1"
+				},
+				{
+					"name": "DerColUpd"
+				},
+				{
+					"name": "DerColIns"
+				}
+			],
+			"script": "source(output(\n\t\t{OETireSize } as string,\n\t\tLoadRange as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> SrcOEForecastLoadRange\nsource(output(\n\t\tOETireSize as string,\n\t\tLoadRange as string,\n\t\tUpdated_Date as timestamp,\n\t\tInserted_Date as timestamp\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> RefDimOEFORECASTLOADRANGE\nSrcOEForecastLoadRange, RefDimOEFORECASTLOADRANGE join({OETireSize } == OETireSize,\n\tjoinType:'left',\n\tbroadcast: 'auto')~> JoinOEtireSize\nJoinOEtireSize split(equals({OETireSize }, OETireSize),\n\tdisjoint: false) ~> ConditionalSplit1@(ConSplitUpd, ConSplitIns)\nConditionalSplit1@ConSplitUpd alterRow() ~> AlterRow1\nAlterRow1 derive(Updated_Date = currentTimestamp()) ~> DerColUpd\nConditionalSplit1@ConSplitIns derive(Inserted_Date = currentTimestamp(),\n\t\tUpdated_Date = '9999-12-31 00:00:00') ~> DerColIns\nDerColIns sink(input(\n\t\tOETireSize as string,\n\t\tLoadRange as string,\n\t\tUpdated_Date as timestamp,\n\t\tInserted_Date as timestamp\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tpreSQLs:['set identity_insert  OE_Forecast_Loadrange on'],\n\tpostSQLs:['set identity_insert  OE_Forecast_Loadrange off'],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> SnkDimOEFORECASTLOADRANGEIns\nDerColUpd sink(input(\n\t\tOETireSize as string,\n\t\tLoadRange as string,\n\t\tUpdated_Date as timestamp,\n\t\tInserted_Date as timestamp\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:true,\n\tupsertable:false,\n\tkeys:['OETireSize '],\n\tformat: 'table',\n\tpreSQLs:['set identity_update OE_Forecast_Loadrange on'],\n\tpostSQLs:['set identity_update OE_Forecast_Loadrange off'],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> SnkDimOEFORECASTLOADRANGEUpd"
+		}
+	}
+}
