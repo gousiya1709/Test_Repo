@@ -5,19 +5,7 @@
 			"Eventtrigger"
 		],
 		"runtimeState": "Started",
-		"pipelines": [
-			{
-				"pipelineReference": {
-					"referenceName": "Event_based_trigger_Pipeline",
-					"type": "PipelineReference"
-				},
-				"parameters": {
-					"PLFilename": "@triggerbody().fileName",
-					"Archivepath": "Src_Backup",
-					"FolderPath": "@triggerbody().folderPath"
-				}
-			}
-		],
+		"pipelines": [],
 		"type": "BlobEventsTrigger",
 		"typeProperties": {
 			"blobPathBeginsWith": "/eventtrigger/blobs/",
