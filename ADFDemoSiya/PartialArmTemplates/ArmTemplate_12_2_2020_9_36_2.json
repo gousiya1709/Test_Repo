@@ -1,0 +1,51 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "ADFDemoSiya"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/Event_Triggr_Dataflow')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "EventTriggrInput",
+								"type": "DatasetReference"
+							},
+							"name": "source1"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "Event_Triggr_SQLdataset",
+								"type": "DatasetReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [
+						{
+							"name": "DerivedColumn1"
+						}
+					],
+					"script": "parameters{\n\tDFilename as string,\n\tArchiveFolder as string\n}\nsource(output(\n\t\tID as string,\n\t\tName as string,\n\t\tModel as string,\n\t\tLength as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tmoveFiles: [($DFilename),(concat($ArchiveFolder,'/',replace($DFilename,'.csv', \"\")))]) ~> source1\nsource1 derive(Length = right(toString(Length),2)) ~> DerivedColumn1\nDerivedColumn1 sink(input(\n\t\tID as integer,\n\t\tName as string,\n\t\tModel as string,\n\t\tLength as integer\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tpreSQLs:['set identity_insert Cars on'],\n\tpostSQLs:['set identity_insert Cars off'],\n\tmapColumn(\n\t\tID,\n\t\tName,\n\t\tModel,\n\t\tLength\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> sink1"
+				}
+			},
+			"dependsOn": []
+		}
+	]
+}
