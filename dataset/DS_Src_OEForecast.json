@@ -8,6 +8,7 @@
 		"annotations": [],
 		"type": "Excel",
 		"typeProperties": {
+			"sheetName": "Loadrange_details",
 			"location": {
 				"type": "AzureBlobStorageLocation",
 				"fileName": "Loadrange1.xlsx",
@@ -18,11 +19,11 @@
 		},
 		"schema": [
 			{
-				"name": "OETireSize ",
+				"name": "Src_OETireSize ",
 				"type": "String"
 			},
 			{
-				"name": "LoadRange",
+				"name": "Src_LoadRange",
 				"type": "String"
 			}
 		]
