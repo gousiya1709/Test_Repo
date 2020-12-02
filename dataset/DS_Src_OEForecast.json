@@ -1,5 +1,5 @@
 {
-	"name": "Excel1",
+	"name": "DS_Src_OEForecast",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "AzureBlobStorage1",
