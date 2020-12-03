@@ -1,0 +1,58 @@
+{
+	"name": "DF_SCDTYPE",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DS_Src_OEForecast",
+						"type": "DatasetReference"
+					},
+					"name": "SrcOEForecastLoadRange"
+				},
+				{
+					"dataset": {
+						"referenceName": "DS_OEFORECASTLOADRANGE",
+						"type": "DatasetReference"
+					},
+					"name": "RefDimOEFORECASTLOADRANGE"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DS_OEFORECASTLOADRANGE",
+						"type": "DatasetReference"
+					},
+					"name": "SnkDimOEFORECASTLOADRANGEIns"
+				},
+				{
+					"dataset": {
+						"referenceName": "DS_OEFORECASTLOADRANGE",
+						"type": "DatasetReference"
+					},
+					"name": "SnkDimOEFORECASTLOADRANGEUpd"
+				}
+			],
+			"transformations": [
+				{
+					"name": "Lookup1"
+				},
+				{
+					"name": "ConditionalSplit1"
+				},
+				{
+					"name": "AlterRowUpd"
+				},
+				{
+					"name": "DerColUpd"
+				},
+				{
+					"name": "DerColIns"
+				}
+			],
+			"script": "source(output(\n\t\t{Src_OETireSize } as string,\n\t\tSrc_LoadRange as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tmoveFiles: ['/SCD1','']) ~> SrcOEForecastLoadRange\nsource(output(\n\t\tOETireSize as string,\n\t\tLoadRange as string,\n\t\tUpdated_Date as timestamp,\n\t\tInserted_Date as timestamp\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> RefDimOEFORECASTLOADRANGE\nSrcOEForecastLoadRange, RefDimOEFORECASTLOADRANGE lookup({Src_OETireSize } == OETireSize,\n\tmultiple: false,\n\tpickup: 'any',\n\tbroadcast: 'auto')~> Lookup1\nLookup1 split(not(isNull({Src_OETireSize }))&&not(isNull(OETireSize))&&ltrim(rtrim(trim({Src_OETireSize })))==ltrim(rtrim(trim(OETireSize))),\n\tnot(isNull({Src_OETireSize }))&&(isNull(OETireSize)),\n\tdisjoint: false) ~> ConditionalSplit1@(ConSplitupd, ConSplitIns, other)\nConditionalSplit1@ConSplitupd alterRow(updateIf(1==1)) ~> AlterRowUpd\nAlterRowUpd derive(UPD_TS = currentTimestamp()) ~> DerColUpd\nConditionalSplit1@ConSplitIns derive(INS_TS = currentTimestamp(),\n\t\tUPD_TS = toTimestamp('9999-12-31 00:00:00')) ~> DerColIns\nDerColIns sink(input(\n\t\tOETireSize as string,\n\t\tLoadRange as string,\n\t\tUpdated_Date as timestamp,\n\t\tInserted_Date as timestamp\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> SnkDimOEFORECASTLOADRANGEIns\nDerColUpd sink(input(\n\t\tOETireSize as string,\n\t\tLoadRange as string,\n\t\tUpdated_Date as timestamp,\n\t\tInserted_Date as timestamp\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:false,\n\tupdateable:true,\n\tupsertable:false,\n\tkeys:['Src_OETireSize '],\n\tformat: 'table',\n\tpreSQLs:['set identity_update OE_Forecast_Loadrange on'],\n\tpostSQLs:['set identity_update OE_Forecast_Loadrange off'],\n\tmapColumn(\n\t\tOETireSize = {Src_OETireSize },\n\t\tLoadRange = Src_LoadRange,\n\t\tUpdated_Date = UPD_TS,\n\t\tInserted_Date\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> SnkDimOEFORECASTLOADRANGEUpd"
+		}
+	}
+}
