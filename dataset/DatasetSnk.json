@@ -10,11 +10,11 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"fileName": "TIRE_FORECAST_US_CAN_1020_w_HIST_updated_111720.xlsx.csv",
-				"folderPath": "output",
+				"folderPath": "SCD1_Backup",
 				"container": "adfdemoc"
 			},
 			"columnDelimiter": ",",
+			"compressionCodec": "gzip",
 			"escapeChar": "\\",
 			"firstRowAsHeader": true,
 			"quoteChar": "\""
