@@ -8,16 +8,6 @@
 		"pipelines": [
 			{
 				"pipelineReference": {
-					"referenceName": "Event_based_trigger_Pipeline",
-					"type": "PipelineReference"
-				},
-				"parameters": {
-					"Folderpath": "@triggerBody().folderpath",
-					"Filename": "@triggerBody().filename"
-				}
-			},
-			{
-				"pipelineReference": {
 					"referenceName": "SCDType1pipeline",
 					"type": "PipelineReference"
 				}
